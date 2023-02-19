@@ -1,0 +1,21 @@
+import socket
+
+
+HOST = 'localhost'
+PORT = 12345
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.connect((HOST, PORT))
+
+
+while True:
+    data = sock.recv(1024)
+    
+    if not data:
+        print("Connection closed")
+        break
+    
+    lines = data.decode('utf-8').split('\n')
+    for line in lines:
+        if line:
+            message = line.strip()
+            print(message)
