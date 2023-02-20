@@ -1,6 +1,7 @@
 import socket
 import threading
-
+import json
+from handle_msg import handle_msg
 
 class Server():
     def __init__(self):
@@ -14,7 +15,13 @@ class Server():
 
     def handle_socket(self):
 
-        self.conn.send(self.Dict)
+        sock_file = self.server.makefile()
+        msg = (json.dumps({"msg": "player-list", "players": self.Dict}) + "\n")
+        sock_file.write(msg)
+        for line in sock_file:
+            handle_msg(json.loads(line))
+
+
 
 
 
