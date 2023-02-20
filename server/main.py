@@ -2,6 +2,7 @@ import socket
 import threading
 import json
 from handle_msg import handle_msg
+import toml
 
 class Server():
     def __init__(self):
@@ -12,6 +13,12 @@ class Server():
         self.Port = 50000
         self.IP = socket.gethostname()
         self.ADDR = (self.IP,self.Port)
+        
+        # load config from config.toml
+        with open ('config.toml', 'r') as f:
+          toml_string = f.read()
+          parsed_toml= toml.loads(toml_string)
+          self.config = parsed_toml
 
     def handle_socket(self):
 
