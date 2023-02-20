@@ -15,8 +15,8 @@ class MainWindow(QMainWindow):
         layout = QGridLayout()
         self.setWindowTitle("Main Screen")
         self.setFixedSize(1000, 800)
-        tesr = matchmaking.matchmaking()
-        layout.addWidget(tesr, 0, 0)
+        login_widgets = matchmaking.matchmaking()
+        layout.addWidget(login_widgets, 0, 0)
 
         WrapperWidget = QWidget()
         WrapperWidget.setLayout(layout)
