@@ -14,17 +14,17 @@ class Server():
 
     def handle_socket(self):
 
-        self.conn.send(self.addr)
+        self.conn.send(self.Dict)
 
-        self.conn.rec(1024)
-        sock.makefile("r")
-        while True:
-            sock.readline()
+
+
 
 
 
     def start_server(self):
         self.Playerlist=[]
+        self.Dict = {}
+        self.counter = 0
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind(self.ADDR)
         self.server.listen(10)
@@ -33,6 +33,10 @@ class Server():
             thread = threading.Thread(target=self.handle_socket)
             thread.start()
             self.Playerlist.append(self.addr)
+            self.Dict[self.counter] = self.counter
+            self.counter = self.counter + 1
+
+
 
 
 
