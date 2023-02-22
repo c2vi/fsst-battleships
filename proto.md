@@ -87,6 +87,9 @@ Every message has a field: "msg", that indicates what type a message is. All use
 - sent from server to either client, to update the score
 - fields: score
 
+## error
+- sent, to inform about an error.
+- field: err-msg: contains an error message
 
 
 
