@@ -1,0 +1,10 @@
+
+field-height = 12
+field-width = 12
+do-hits-around = true
+allow-no-gap = false
+
+[ships]
+aircraft-carrier = 1
+3x1 = 2
+2x1 = 2
