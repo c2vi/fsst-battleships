@@ -11,7 +11,7 @@ class Server():
         self.conn = None
         self.addr = None
         self.Port = 50000
-        self.IP = socket.gethostname()
+        self.IP = "0.0.0.0"
         self.ADDR = (self.IP,self.Port)
         
         # load the config from the config.toml file
@@ -22,9 +22,9 @@ class Server():
 
     def handle_socket(self):
 
-        sock_file = self.server.makefile()
+        sock_file = self.conn.makefile()
         msg = (json.dumps({"msg": "player-list", "players": self.Dict}) + "\n")
-        sock_file.write(msg)
+        self.conn.send(msg.encode("utf-8"))
         for line in sock_file:
             handle_msg(json.loads(line))
 
