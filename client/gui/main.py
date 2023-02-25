@@ -1,5 +1,6 @@
 import sys
 import matchmaking
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
   QApplication,
   QGridLayout,
@@ -27,6 +28,25 @@ class MainWindow(QMainWindow):
     def set_name (self):
 
     def match_req(self):
+        mtch_rqst = QMessageBox(self)
+        mtch_rqst.setWindowTitle("Match Request")
+        txt = "... requests a match!\n Play ...?"  # later err-msg
+        mtch_rqst.setText(txt)
+        mtch_rqst.setStandardButtons(
+            QMessageBox.StandardButton.Yes
+            | QMessageBox.StandardButton.No)
+        mtch_rqst.setStyleSheet(
+            "QLabel{min-width:300 px; font-size: 24px;} QPushButton{ width:100px; font-size: 14px; }")
+        button = mtch_rqst.exec()
+        # Look up the button enum entry for the result.
+        button = QMessageBox.StandardButton(button)
+        if button == QMessageBox.StandardButton.Yes:
+            # message needs to be send!
+            print("Yes")
+        else:
+            print("No")
+    match_req()
+
 
     def match_req_cancel(self):
 
@@ -51,19 +71,23 @@ class MainWindow(QMainWindow):
     def set_score(self):
 
     def error(self):
-        #set up the error message box
-        err_bx = QMessageBox()
+        #sets up the message box
+        err_bx = QMessageBox(self)
         err_bx.setWindowTitle("Error Box")
-        txt = "test" #later err-msg
+        txt = "test"  # temp var - later err-msg
         err_bx.setText(txt)
-        err_bx.setIcon(QMessageBox.Critical)
-        err_bx.setStandardButtons(QMessageBox.Ok)
-        err_bx.buttonClicked.connect(self.popup_clicked)
-        #shows error message box
-        #err_bx.exec_()
+        err_bx.setStandardButtons(QMessageBox.StandardButton.Ok)
+        err_bx.setIcon(QMessageBox.Icon.Critical)
+        #changes the size of the label => changes the size of the box
+        err_bx.setStyleSheet(
+            "QLabel{min-width:200 px; font-size: 24px;} QPushButton{ width:100px; font-size: 14px; }")
+        button = err_bx.exec()
+        #happens after you press the OK button
+        button = QMessageBox.StandardButton(button)
+        if button == QMessageBox.StandardButton.Ok:
+            print("Ok!")
 
-        def popup_clicked(self, i):
-            print(i.text())
+    error()
 
 
 
