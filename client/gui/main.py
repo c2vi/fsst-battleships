@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
   QMainWindow,
   QWidget,
   QMessageBox,
+  QLabel,
 )
 
 
@@ -69,6 +70,9 @@ class MainWindow(QMainWindow):
     def game_hit_success(self):
 
     def set_score(self):
+        txt = "test score : 25" # placeholder, later set_score
+        score = QLabel(txt)
+        score.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def error(self):
         #sets up the message box
