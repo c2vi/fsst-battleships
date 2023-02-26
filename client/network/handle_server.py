@@ -1,35 +1,37 @@
-def send_server(message):
-    pass
+class ServerCommunication:
+    def __init__(self):
+        pass
 
+    def send_server(self, message):
+        pass
 
+    def set_name(self, name):
+        dic = {"name": name}
+        self.send_server(dic)
 
-def set_name(name):
-    dic = {"name": name}
-    send_server(dic)
+    def match_req(self, player_id):
+        dic = {"player_id": player_id}
+        self.send_server(dic)
 
-def match_req(player_id):
-    dic = {"player_id": player_id}
-    send_server(dic)
+    def match_ack(self, player_id):
+        dic = {"player_id": player_id}
+        self.send_server(dic)
 
-def match_ack(player_id):
-    dic = {"player_id": player_id}
-    send_server(dic)
+    def match_deny(self, player_id):
+        dic = {"player_id": player_id}
+        self.send_server(dic)
 
-def match_deny(player_id):
-    dic = {"player_id": player_id}
-    send_server(dic)
+    def game_cancel(self):
+        dic = {"game_cancel":""}
+        self.send_server(dic)
 
-def game_cancel():
-    dic = {"game_cancel":""}
-    send_server(dic)
+    def game_place(self, ships):
+        dic = {"game_place": ships}
+        self.send_server(dic)
 
-def game_place(ships):
-    dic = {"game_place": ships}
-    send_server(dic)
-
-def game_hit(x,y):
-    dic = {"game_hit": {"x": x, "y": y}}
-    send_server(dic)
+    def game_hit(self, x,y):
+        dic = {"game_hit": {"x": x, "y": y}}
+        self.send_server(dic)
 
 
 
