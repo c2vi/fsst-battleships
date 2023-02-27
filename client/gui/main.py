@@ -1,5 +1,5 @@
 import sys
-import matchmaking
+from .matchmaking import Matchmaking
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
   QApplication,
@@ -13,7 +13,7 @@ from PyQt6.QtWidgets import (
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, client):
+    def __init__(self, client=None):
         super().__init__()
         self.client = client
         self.state = "matchmaking"
@@ -21,23 +21,21 @@ class MainWindow(QMainWindow):
         layout = QGridLayout()
         self.setWindowTitle("Main Screen")
         self.setFixedSize(1000, 800)
-        test = matchmaking.matchmaking()
+        test = Matchmaking(client)
         layout.addWidget(test, 0, 0)
 
         self.switch_button = QPushButton("SCOREBOARD")
         WrapperWidget = QWidget()
         WrapperWidget.setLayout(layout)
         self.setCentralWidget(WrapperWidget)
+
     def switch_view(self):
+
         if self.switch_button:
             self.state = "scoreboard"
+
     def player_list (self, players):
-        for player in players:
-            txt = players["name"]
-            names_widget = QLabel(txt)
-
-
-
+        pass
 
     def match_req(self):
         mtch_rqst = QMessageBox(self)
@@ -57,28 +55,36 @@ class MainWindow(QMainWindow):
             print("Yes")
         else:
             print("No")
-    match_req()
-
 
     def match_req_cancel(self):
+        pass
 
     def match_ack(self):
+        pass
 
     def match_deny(self):
+        pass
 
     def game_start(self):
+        pass
 
     def game_cancel(self):
+        pass
 
     def game_place(self):
+        pass
 
     def game_place_invalid(self):
+        pass
 
     def game_do_hit(self):
+        pass
 
     def game_hit(self):
+        pass
 
     def game_hit_success(self):
+        pass
 
     def set_score(self):
         txt = "test score : 25" # placeholder, later set_score
@@ -103,13 +109,9 @@ class MainWindow(QMainWindow):
             print("Ok!")
             self.centralWidget(self)
 
-    error()
-
-
-
 
 if __name__ == "__Main__":
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-app.exec()
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec()
