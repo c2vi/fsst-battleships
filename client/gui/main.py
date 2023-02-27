@@ -8,13 +8,15 @@ from PyQt6.QtWidgets import (
   QWidget,
   QMessageBox,
   QLabel,
+  QPushButton,
 )
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, client):
         super().__init__()
-
+        self.client = client
+        self.state = "matchmaking"
 
         layout = QGridLayout()
         self.setWindowTitle("Main Screen")
@@ -22,16 +24,25 @@ class MainWindow(QMainWindow):
         test = matchmaking.matchmaking()
         layout.addWidget(test, 0, 0)
 
+        self.switch_button = QPushButton("SCOREBOARD")
         WrapperWidget = QWidget()
         WrapperWidget.setLayout(layout)
         self.setCentralWidget(WrapperWidget)
-    def player_list (self):
-    def set_name (self):
+    def switch_view(self):
+        if self.switch_button:
+            self.state = "scoreboard"
+    def player_list (self, players):
+        for player in players:
+            txt = players["name"]
+            names_widget = QLabel(txt)
+
+
+
 
     def match_req(self):
         mtch_rqst = QMessageBox(self)
         mtch_rqst.setWindowTitle("Match Request")
-        txt = "... requests a match!\n Play ...?"  # later err-msg
+        txt = "... requests a match!\n Play ...?"  # later match-request
         mtch_rqst.setText(txt)
         mtch_rqst.setStandardButtons(
             QMessageBox.StandardButton.Yes
@@ -90,13 +101,14 @@ class MainWindow(QMainWindow):
         button = QMessageBox.StandardButton(button)
         if button == QMessageBox.StandardButton.Ok:
             print("Ok!")
+            self.centralWidget(self)
 
     error()
 
 
 
 
-
+if __name__ == "__Main__":
 app = QApplication(sys.argv)
 window = MainWindow()
 window.show()

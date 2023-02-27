@@ -6,13 +6,16 @@ from PyQt6.QtWidgets import (
   QLineEdit,
   QLabel,
   QPushButton,
+  QScrollArea,
 )
 
 
 
 class matchmaking(QWidget):
-    def __init__(self):
+
+    def __init__(self, client):
         super().__init__()
+        self.client = client
         self.button = QPushButton("Done")
 
         # define label widget + set font + center label
@@ -29,7 +32,16 @@ class matchmaking(QWidget):
         layout_mtchmkng.addWidget(widget_nme_lbl, 0, 0)
         layout_mtchmkng.addWidget(widget_lne_nme, 0, 1)
         layout_mtchmkng.addWidget(self.button, 1, 0)
+        player_names = self.player_list()
+        layout_mtchmkng.addWidget(player_names)
 
         self.setLayout(layout_mtchmkng)
     def button_clicked(self):
-        set_name()
+        self.client.set_name()
+
+    def player_list (self, players):
+        for player in players:
+            txt = players["name"]
+            names_widget = QPushButton(txt)
+            return names_widget
+
