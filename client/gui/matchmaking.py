@@ -25,7 +25,7 @@ class Matchmaking(QWidget):
         font.setPointSize(30)
         widget_nme_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        #define line widget where user can enter name
+        # define line widget where user can enter name
         widget_lne_nme = QLineEdit()
         widget_lne_nme.setMaxLength(10)
 
@@ -40,7 +40,7 @@ class Matchmaking(QWidget):
     def button_clicked(self):
         self.client.set_name()
 
-    def player_list (self, players):
+    def player_list(self, players):
 
         inside_widget = QWidget()
         inside_layout = QVBoxLayout

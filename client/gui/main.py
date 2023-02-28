@@ -25,6 +25,10 @@ class MainWindow(QMainWindow):
         layout.addWidget(test, 0, 0)
 
         self.switch_button = QPushButton("SCOREBOARD")
+        if self.state == "scoreboard":
+            self.switch_button.setText("GAME")
+        else:
+            self.switch_button.setText("SCOREBOARD")
         WrapperWidget = QWidget()
         WrapperWidget.setLayout(layout)
         self.setCentralWidget(WrapperWidget)
@@ -32,7 +36,10 @@ class MainWindow(QMainWindow):
     def switch_view(self):
 
         if self.switch_button:
-            self.state = "scoreboard"
+            if self.state == "game":
+                self.state = "scoreboard"
+            if self.state == "scoreboard":
+                self.state = "game"
 
     def player_list (self, players):
         pass
