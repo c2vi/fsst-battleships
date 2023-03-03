@@ -1,4 +1,3 @@
-
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
   QGridLayout,
@@ -12,12 +11,31 @@ from PyQt6.QtWidgets import (
 
 
 class Matchmaking(QWidget):
+    def player_list(self):
+
+        inside_widget = QWidget()
+        inside_layout = QVBoxLayout
+
+        self.scroll_area.setWidget(inside_widget)
+        self.scroll_area.setWidgetResizable(True)
+
+        self.scroll_area.setLayout(inside_layout) # help
+
+
+        players = {"name": "THOMML"}
+
+        for player in players:
+            txt = "THOMML"
+            print(player)
+            names_widget = QPushButton(txt)
+            inside_layout.addWidget(names_widget)
 
     def __init__(self, client=None):
         super().__init__()
         self.client = client
         self.button = QPushButton("Done")
         self.scroll_area = QScrollArea()
+
 
         # define label widget + set font + center label
         widget_nme_lbl = QLabel("Name")
@@ -36,21 +54,10 @@ class Matchmaking(QWidget):
         self.layout_mtchmkng.addWidget(self.scroll_area, 1, 1)
 
         self.setLayout(self.layout_mtchmkng)
+        self.player_list()
 
     def button_clicked(self):
+        print("START GAME")
         self.client.set_name()
 
-    def player_list(self, players):
-
-        inside_widget = QWidget()
-        inside_layout = QVBoxLayout
-
-        self.scroll_area.setLayout(inside_layout)
-
-        self.scroll_area.setWidget(inside_widget)
-        self.scroll_area.setWidgetResizable(True)
-        for player in players:
-            txt = players["name"]
-            names_widget = QPushButton(txt)
-            inside_layout.addWidget(names_widget)
 

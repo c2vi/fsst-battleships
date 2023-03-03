@@ -38,8 +38,10 @@ class MainWindow(QMainWindow):
         if self.switch_button:
             if self.state == "game":
                 self.state = "scoreboard"
+                self.switch_button.setText("GAME")
             if self.state == "scoreboard":
                 self.state = "game"
+                self.switch_button.setText("SCOREBOARD")
 
     def player_list (self, players):
         pass
