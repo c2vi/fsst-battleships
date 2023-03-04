@@ -41,7 +41,7 @@ class playerlist(QWidget):
     def player_list(self, players):
 
         inside_widget = QWidget()
-        inside_layout = QVBoxLayout
+        inside_layout = QVBoxLayout()
 
         self.scroll_area.setLayout(inside_layout)
 

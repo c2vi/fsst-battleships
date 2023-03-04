@@ -10,5 +10,11 @@ class Client:
         window.show()
         app.exec()
 
+    def match_req(self, player_id):
+        print(player_id)
+
+    def set_name(self, name):
+        print(name)
+
 
 client = Client()

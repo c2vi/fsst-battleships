@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
     def player_list (self, players):
         pass
 
-    def match_req(self):
+    def match_req(self, player_id):
         mtch_rqst = QMessageBox(self)
         mtch_rqst.setWindowTitle("Match Request")
         txt = "... requests a match!\n Play ...?"  # later match-request
