@@ -33,17 +33,11 @@ class MainWindow(QMainWindow):
         WrapperWidget.setLayout(layout)
         self.setCentralWidget(WrapperWidget)
 
-    def switch_view(self):
-
-        if self.switch_button:
-            if self.state == "game":
-                self.state = "scoreboard"
-                self.switch_button.setText("GAME")
-            if self.state == "scoreboard":
-                self.state = "game"
-                self.switch_button.setText("SCOREBOARD")
-
     def player_list (self, players):
+        if self.state == "playerlist":
+            print("playerlist function from player list")
+        if self.state == "matchmaking":
+            print("playerlist function from matchmaking")
         pass
 
     def match_req(self, player_id):
