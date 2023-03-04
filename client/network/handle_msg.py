@@ -15,13 +15,8 @@ class MessageHandler:
                           "set_score": self.set_score,
                           "error": self.error}
     
-    def handle_message(self, message=any):
-        message_dict = json.loads(message) #json string übergeben, krieg ein dict zurück
 
-        message_dict["message_dict"]
-        self.commands.get(message_dict,self.wrong_commands)(message_dict)
-        
-
+       
     def player_list(self,msg):
         player_list = msg["players"]
         self.gui.player_list(player_list)
@@ -32,7 +27,7 @@ class MessageHandler:
 
     def match_req_cancel(self,msg):
         player_id = msg["player_id"]
-        self.gui.match_req_cance()
+        self.gui.match_req_cancel()
 
     def game_start(self,msg):
         boats = msg["boats"]
@@ -51,7 +46,7 @@ class MessageHandler:
         self.gui.game_do_hit()
 
     def game_hit_success(self,msg):
-        x = msg["x"]
+        x = msg["x"] 
         y = msg["y"]
         self.gui.game_hit_success()
 
@@ -70,3 +65,4 @@ class MessageHandler:
         for msg in message:
                 self.commands.get(msg,self.wrong_commands)(message) #Checks if the function is there and executes them if yes 
         
+
