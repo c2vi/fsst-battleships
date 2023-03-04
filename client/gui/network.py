@@ -14,7 +14,7 @@ def network():
 
     def set_name():
 
-        msg= json.dumps("msg":"set-name",)
+        msg= json.dumps({"msg":"set-name"})
 
     while True:
         message = file.readline().strip()
