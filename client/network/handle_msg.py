@@ -3,7 +3,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import client.main as gui
 
 class MessageHandler:
-    def __init__(self, gui:gui.MainWindow):
+    def __init__(self, gui):
         self.gui = gui
         self.commands  = {"player_list": self.player_list,
                           "match_req": self.match_req,
