@@ -1,7 +1,7 @@
 import socket
 import threading
 import json
-from handle_msg import handle_msg
+import handle_msg
 import toml
 
 class Server():
