@@ -26,7 +26,7 @@ class Client:
         while connected:
             message = self.file.readline().strip()
             message = json.loads(message)
-            print("message: ")
+            print("message: ", message)
 
             if not message:
                 print("Connection closed")
