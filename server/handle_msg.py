@@ -1,8 +1,14 @@
+import json
+
 def player_list(player,msg,server):
     pass
 
 def set_name(player,msg,server):
-    pass
+
+    player.name = msg["name"]
+    msg = (json.dumps({"msg": "player_list", "players": server.get_players()}) + "\n")
+    for player in server.players:
+        player.conn.send(msg)
 
 def match_req_cancel(player,msg,server):
     pass
