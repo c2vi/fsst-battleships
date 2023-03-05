@@ -38,4 +38,5 @@ def set_score(player,msg,server):
     pass
 
 def error(player,msg,server):
+
     pass
