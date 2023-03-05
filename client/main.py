@@ -96,5 +96,5 @@ class Client:
             "y": y}
         self.send_server(dic)
             
-if __name__ == "___main__":
+if __name__ == "__main__":
     Client() 
