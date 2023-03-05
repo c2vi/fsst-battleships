@@ -39,7 +39,7 @@ def check_client_data(player, msg, server):
 def handle_socket(data, player):
     sock_file = data.server.makefile()
     msg = (json.dumps({"msg": "player_list", "Id": data.Id}) + "\n")
-    sock_file.send(msg)
+    data.server.send(msg)
     for line in sock_file:
         try:
             msg = json.loads(line)
@@ -55,7 +55,7 @@ class Server():
         self.server = None
         self.conn = None
         self.addr = None
-        self.Port = 12345
+        self.Port = 3003
         self.IP = "0.0.0.0"
         self.ADDR = (self.IP, self.Port)
 
