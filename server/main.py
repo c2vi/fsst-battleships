@@ -7,25 +7,33 @@ import handle_msg
 def check_client_data(player, msg, server):
     handlers = {
 
-        "handle_msg": handle_msg.player_list(player, msg, server),
-        "handle_msg": handle_msg.set_name(player, msg, server),
-        "handle_msg": handle_msg.match_req(player, msg, server),
-        "handle_msg": handle_msg.match_req_cancel(player, msg, server),
-        "handle_msg": handle_msg.match_ack(player, msg, server),
-        "handle_msg": handle_msg.match_deny(player, msg, server),
-        "handle_msg": handle_msg.game_start(player, msg, server),
-        "handle_msg": handle_msg.game_cancel(player, msg, server),
-        "handle_msg": handle_msg.game_place(player, msg, server),
-        "handle_msg": handle_msg.game_place_invalid(player, msg, server),
-        "handle_msg": handle_msg.game_do_hit(player, msg, server),
-        "handle_msg": handle_msg.game_hit(player, msg, server),
-        "handle_msg": handle_msg.game_hit_success(player, msg, server),
-        "handle_msg": handle_msg.set_score(player, msg, server),
-        "handle_msg": handle_msg.error(player, msg, server)
+        "handle_msg": handle_msg.player_list,
+        "handle_msg": handle_msg.set_name,
+        "handle_msg": handle_msg.match_req,
+        "handle_msg": handle_msg.match_req_cancel,
+        "handle_msg": handle_msg.match_ack,
+        "handle_msg": handle_msg.match_deny,
+        "handle_msg": handle_msg.game_start,
+        "handle_msg": handle_msg.game_cancel,
+        "handle_msg": handle_msg.game_place,
+        "handle_msg": handle_msg.game_place_invalid,
+        "handle_msg": handle_msg.game_do_hit,
+        "handle_msg": handle_msg.game_hit,
+        "handle_msg": handle_msg.game_hit_success,
+        "handle_msg": handle_msg.set_score,
+        "handle_msg": handle_msg.error
 
     }
 
-    handlers.get("handle_msg")
+    def message_not_found(player, msg, server):
+        print("JSON Message is not aviable in the dictonary")
+
+    handler = handlers.get("handle_msg",message_not_found)
+    handler(player, msg, server)
+
+
+
+
 
 
 def handle_socket(data, player):
@@ -47,8 +55,8 @@ class Server():
         self.server = None
         self.conn = None
         self.addr = None
-        self.Port = 50000
-        self.IP = socket.gethostname()
+        self.Port = 12345
+        self.IP = "0.0.0.0"
         self.ADDR = (self.IP, self.Port)
 
     def start_server(self):
