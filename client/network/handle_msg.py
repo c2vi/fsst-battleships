@@ -1,6 +1,5 @@
 import json, os, sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-import client.main as gui
 
 class MessageHandler:
     def __init__(self, gui):

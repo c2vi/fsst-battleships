@@ -1,7 +1,7 @@
 import socket
 from network.handle_msg import MessageHandler
 import json
-import gui
+from gui.main import MainWindow
 from PyQt6.QtWidgets import (QApplication)
 import sys
 import threading
@@ -10,14 +10,17 @@ import threading
 class Client:
     HOST = 'localhost'
     PORT = 12345
-    def __init__(self,gui):
+    def __init__(self,):
+        self.app = QApplication(sys.argv)
+        window = MainWindow(self)
+        window.show()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.HOST, self.PORT))
         self.file = self.socket.makefile("r")
-        self.msg_handler = MessageHandler(gui)
-        thread = threading.Thread(target=self.start_gui, args=(self,))
+        self.msg_handler = MessageHandler(window)
+        thread = threading.Thread(target=self.server)
         thread.start()
-        self.server()
+        self.start_gui()
         
 
     def server(self):
@@ -34,10 +37,7 @@ class Client:
             self.msg_handler.handle_msg(message)
 
     def start_gui(self):
-        app = QApplication(sys.argv)
-        window = gui.MainWindow(self)
-        window.show()
-        app.exec()
+        self.app.exec()
     
 
 
@@ -96,3 +96,5 @@ class Client:
             "y": y}
         self.send_server(dic)
             
+if __name__ == "___main__":
+    Client() 
