@@ -10,10 +10,12 @@ from PyQt6.QtWidgets import (
 )
 
 
-class playerlist(QWidget):
+class Playerlist(QWidget):
 
-    def __init__(self):
+    def __init__(self, main):
         super().__init__()
+        self.main = main
+
         self.scroll_area = QScrollArea()
         self.state = "playerlist"
 
@@ -33,10 +35,10 @@ class playerlist(QWidget):
         self.setLayout(self.layout_playerlist)
 
     def button_game_clicked(self):
-        self.state = "game"
+        self.main.state = "game"
 
     def button_scoreboard_clicked(self):
-        self.state = "scoreboard"
+        self.main.state = "scoreboard"
 
     def player_list(self, players):
 

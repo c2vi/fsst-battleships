@@ -1,4 +1,7 @@
 import sys
+from .game import Game
+from .playerlist import Playerlist
+from .scroeboard import Scoreboard
 from .matchmaking import Matchmaking
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
@@ -24,18 +27,20 @@ class MainWindow(QMainWindow):
         test = Matchmaking(client)
         layout.addWidget(test, 0, 0)
 
-        self.switch_button = QPushButton("SCOREBOARD")
+        if self.state == "game":
+            Game(self)
+        if self.state == "playerlist":
+            Playerlist(self)
         if self.state == "scoreboard":
-            self.switch_button.setText("GAME")
-        else:
-            self.switch_button.setText("SCOREBOARD")
+            Scoreboard(self)
+
         WrapperWidget = QWidget()
         WrapperWidget.setLayout(layout)
         self.setCentralWidget(WrapperWidget)
 
     def player_list (self, players):
         if self.state == "playerlist":
-            print("playerlist function from player list")
+            print("playerlist function from player list") #some kinda "flag" so the client (david) knows which player_list is used
         if self.state == "matchmaking":
             print("playerlist function from matchmaking")
         pass
