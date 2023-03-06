@@ -16,12 +16,9 @@ class MessageHandler:
                           "error": self.error}
     
 
-       
     def player_list(self, msg):
         player_list = msg["players"]
-        print("here", player_list)
         self.gui.player_list(player_list)
-
 
     def match_req(self,msg):
         self.gui.match_req()

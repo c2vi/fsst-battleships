@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import (
   QScrollArea,
   QVBoxLayout,
 )
+import threading
 
 
 class Matchmaking(QWidget):
@@ -29,7 +30,6 @@ class Matchmaking(QWidget):
         for player in players:
             txt = player["name"]
             player_id = player["id"]
-            print(player)
             names_widget = QPushButton(txt)
             names_widget.clicked.connect(self.name_clicked(player_id))
             inside_layout.addWidget(names_widget)
@@ -77,6 +77,8 @@ class Matchmaking(QWidget):
     def button_clicked(self):
         print("START GAME")
         name = self.widget_lne_nme.text()
+        #self.client.socket.send("HELLOOOOOOOOOOOOOOOOOOOOOOOOOOO".encode("utf-8"))
+
         self.client.set_name(name)
 
 

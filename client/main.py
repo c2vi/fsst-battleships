@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (QApplication, QWidget)
 from PyQt6 import QtCore
 import sys
 import threading
+import select
 
 
 class Client(QWidget):
@@ -21,21 +22,24 @@ class Client(QWidget):
         window.show()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.HOST, self.PORT))
+
         self.file = self.socket.makefile("r")
+
         self.msg_handler = MessageHandler(window, self)
-        thread = threading.Thread(target=self.server)
-        thread.start()
+
+        self.thread = threading.Thread(target=self.server)
+        self.thread.start()
+
         self.start_gui()
 
-        
 
     def server(self):
         connected = True
         
         while connected:
             message = self.file.readline().strip()
+            print("GOT: ", message)
             message = json.loads(message)
-            print("message: ", message)
 
             if not message:
                 print("Connection closed")
@@ -48,9 +52,11 @@ class Client(QWidget):
 
 
     def send_server(self,message):
-        print("HERE")
         json_message = json.dumps(message)
-        self.socket.send(json_message.encode("utf-8"))
+        self.socket.send((json_message + "\n").encode("utf-8"))
+
+        #thread = threading.Thread(target = self.socket.send, args=[json_message.encode("utf-8")])
+        #thread.start()
         
 
 

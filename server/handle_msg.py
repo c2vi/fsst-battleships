@@ -5,15 +5,19 @@ def player_list(player,msg,server):
 
 def set_name(player,msg,server):
 
-    player.name = msg["name"]
+    player.player_name = msg["name"]
+
     msg = (json.dumps({"msg": "player_list", "players": server.get_players()}) + "\n")
-    for player in server.players:
-        player.conn.send(msg)
+    for player in server.players.values():
+        player.conn.send((msg + "").encode("utf-8"))
 
 def match_req_cancel(player,msg,server):
     pass
 
 def match_ack(player,msg,server):
+    pass
+
+def match_req(player,msg,server):
     pass
 
 def match_deny(player,msg,server):

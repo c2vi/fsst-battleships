@@ -40,14 +40,14 @@ class MainWindow(QMainWindow):
     def signal_handler(self, duple):
         hanlder = duple[0]
         message = duple[1]
-        print("in handler", message)
         hanlder(message)
 
     def player_list (self, players):
         if self.state == "playerlist":
-            print("playerlist function from player list")
+            pass
+            #print("playerlist function from player list")
         if self.state == "matchmaking":
-            print("playerlist function from matchmaking")
+            #print("playerlist function from matchmaking")
             self.matchmaking.player_list(players)
 
     def match_req(self, player_id):

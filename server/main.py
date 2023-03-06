@@ -10,41 +10,39 @@ import signal
 def check_client_data(player, msg, server):
     handlers = {
 
-        "handle_msg": handle_msg.player_list,
-        "handle_msg": handle_msg.set_name,
-        "handle_msg": handle_msg.match_req,
-        "handle_msg": handle_msg.match_req_cancel,
-        "handle_msg": handle_msg.match_ack,
-        "handle_msg": handle_msg.match_deny,
-        "handle_msg": handle_msg.game_start,
-        "handle_msg": handle_msg.game_cancel,
-        "handle_msg": handle_msg.game_place,
-        "handle_msg": handle_msg.game_place_invalid,
-        "handle_msg": handle_msg.game_do_hit,
-        "handle_msg": handle_msg.game_hit,
-        "handle_msg": handle_msg.game_hit_success,
-        "handle_msg": handle_msg.set_score,
-        "handle_msg": handle_msg.error
+        "player_list": handle_msg.player_list,
+        "set_name": handle_msg.set_name,
+        "match_req": handle_msg.match_req,
+        "match_req_cancel": handle_msg.match_req_cancel,
+        "match_ack": handle_msg.match_ack,
+        "match_deny": handle_msg.match_deny,
+        "game_start": handle_msg.game_start,
+        "game_cancel": handle_msg.game_cancel,
+        "game_place": handle_msg.game_place,
+        "game_place_invalid": handle_msg.game_place_invalid,
+        "game_do_hit": handle_msg.game_do_hit,
+        "game_hit": handle_msg.game_hit,
+        "game_hit_success": handle_msg.game_hit_success,
+        "set_score": handle_msg.set_score,
+        "error": handle_msg.error
 
     }
 
     def message_not_found(player, msg, server):
         print("JSON Message is not aviable in the dictonary")
 
-    handler = handlers.get("handle_msg",message_not_found)
+    handler = handlers.get(msg["msg"], message_not_found)
     handler(player, msg, server)
 
 
-
-
-
-
 def handle_socket(data, player):
-    print("conn: ", player.conn)
-    print("handle_socket")
+    print("New Player connected")
     sock_file = player.conn.makefile("r")
-    msg = (json.dumps({"msg": "player_list", "players": data.get_players()}) + "\n")
-    player.conn.send(msg.encode("utf-8"))
+    msg = json.dumps({"msg": "player_list", "players": data.get_players()}) + "\n"
+
+    for player in server.players.values():
+        player.conn.send((msg + "").encode("utf-8"))
+
     for line in sock_file:
         print("GOT: ", line)
         try:
@@ -75,7 +73,6 @@ class Server():
         self.server.listen(10)
         while True:
             conn, self.addr = self.server.accept()
-            print("conn: ", conn)
             player = Player(self.Id, conn)
             self.players[self.Id] = player
             thread = threading.Thread(target=handle_socket, args=(self, player))
