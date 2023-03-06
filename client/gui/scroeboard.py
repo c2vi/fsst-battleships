@@ -12,10 +12,13 @@ from PyQt6.QtWidgets import (
 
 class Scoreboard(QWidget):
 
-    def __init__(self):
+    def __init__(self, main):
         super().__init__()
-        self.scroll_area = QScrollArea()
+
+        self.main = main
         self.state = "scoreboard"
+
+        self.scroll_area = QScrollArea()
 
         self.button_game = QPushButton("GAME")
         self.button_game.clicked.connect(self.button_game_clicked)
@@ -33,7 +36,7 @@ class Scoreboard(QWidget):
         self.setLayout(self.layout_playerlist)
 
     def button_game_clicked(self):
-        self.state = "game"
+        self.main.state = "game"
 
     def button_playerlist_clicked(self):
-        self.state = "playerlist"
+        self.main.state = "playerlist"
