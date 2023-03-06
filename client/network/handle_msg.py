@@ -2,8 +2,9 @@ import json, os, sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 class MessageHandler:
-    def __init__(self, gui):
+    def __init__(self, gui, client):
         self.gui = gui
+        self.client = client
         self.commands  = {"player_list": self.player_list,
                           "match_req": self.match_req,
                           "match_req_cancel": self.match_req_cancel,
@@ -16,8 +17,9 @@ class MessageHandler:
     
 
        
-    def player_list(self,msg):
+    def player_list(self, msg):
         player_list = msg["players"]
+        print("here", player_list)
         self.gui.player_list(player_list)
 
 
@@ -58,10 +60,10 @@ class MessageHandler:
         self.gui.error()
         
     def wrong_commands(self,msg):
-        print("Command not found!")
+        print("Command not found!", msg)
 
     def handle_msg(self,message):
-        for msg in message:
-                self.commands.get(msg,self.wrong_commands)(message) #Checks if the function is there and executes them if yes 
+        handler = self.commands.get(message["msg"] ,self.wrong_commands) #Checks if the function is there and executes them if yes 
+        self.client.signal.emit((handler, message))
         
 

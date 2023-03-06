@@ -2,25 +2,31 @@ import socket
 from network.handle_msg import MessageHandler
 import json
 from gui.main import MainWindow
-from PyQt6.QtWidgets import (QApplication)
+from PyQt6.QtWidgets import (QApplication, QWidget)
+from PyQt6 import QtCore
 import sys
 import threading
 
 
-class Client:
+class Client(QWidget):
     HOST = 'localhost'
-    PORT = 12345
-    def __init__(self,):
-        self.app = QApplication(sys.argv)
+    PORT = 3005
+    signal = QtCore.pyqtSignal(object)
+
+    def __init__(self, app):
+        super().__init__()
+        
+        self.app = app
         window = MainWindow(self)
         window.show()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.HOST, self.PORT))
         self.file = self.socket.makefile("r")
-        self.msg_handler = MessageHandler(window)
+        self.msg_handler = MessageHandler(window, self)
         thread = threading.Thread(target=self.server)
         thread.start()
         self.start_gui()
+
         
 
     def server(self):
@@ -42,13 +48,13 @@ class Client:
 
 
     def send_server(self,message):
+        print("HERE")
         json_message = json.dumps(message)
-        self.socket.send(str(json_message).encode("utf-8"))
+        self.socket.send(json_message.encode("utf-8"))
         
 
 
     def set_name(self,name):
-
         dic = {
             "msg":"set_name",
             "name": name
@@ -97,4 +103,5 @@ class Client:
         self.send_server(dic)
             
 if __name__ == "__main__":
-    Client() 
+    app = QApplication(sys.argv)
+    Client(app) 

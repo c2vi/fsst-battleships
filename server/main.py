@@ -2,6 +2,7 @@ import socket
 import threading
 import json
 import handle_msg
+import signal
 
 
 def check_client_data(player, msg, server):
@@ -37,16 +38,20 @@ def check_client_data(player, msg, server):
 
 
 def handle_socket(data, player):
-    sock_file = data.server.makefile()
-    msg = (json.dumps({"msg": "player_list", "Id": data.Id}) + "\n")
-    data.server.send(msg)
+    print("conn: ", player.conn)
+    print("handle_socket")
+    sock_file = player.conn.makefile("r")
+    msg = (json.dumps({"msg": "player_list", "players": data.get_players()}) + "\n")
+    player.conn.send(msg.encode("utf-8"))
     for line in sock_file:
+        print("GOT: ", line)
         try:
             msg = json.loads(line)
-            check_client_data(player, msg, data)
         except:
             msg = "what you sent was not valid JSON"
-            sock_file.send(msg)
+            player.conn.send(msg.encode("utf-8"))
+
+        check_client_data(player, msg, data)
 
 
 class Server():
@@ -55,7 +60,7 @@ class Server():
         self.server = None
         self.conn = None
         self.addr = None
-        self.Port = 3003
+        self.Port = 3005
         self.IP = "0.0.0.0"
         self.ADDR = (self.IP, self.Port)
 
@@ -63,15 +68,27 @@ class Server():
         self.Id = 0
         self.players = {}
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.bind(self.ADDR)
         self.server.listen(10)
         while True:
-            self.conn, self.addr = self.server.accept()
-            player = Player(self.Id, self.conn)
+            conn, self.addr = self.server.accept()
+            print("conn: ", conn)
+            player = Player(self.Id, conn)
             self.players[self.Id] = player
             thread = threading.Thread(target=handle_socket, args=(self, player))
             thread.start()
             self.Id = self.Id + 1
+
+    def get_players(self):
+        players = []
+        for player in self.players.values():
+            players.append({
+                "name": player.player_name,
+                "id": player.Id
+                })
+
+        return players
 
 
 class Player():
@@ -84,12 +101,16 @@ class Player():
         super().__init__()
         self.Id = Id
         self.conn = conn
-        self.player_name = None
+        self.player_name = "No Name Yet"
 
 
 # class game():
 
+def signal_handler(sig, frame):
+    print("recieved SIGINT")
+    server.server.close()
 
 if __name__ == '__main__':
     server = Server()
+    #signal.signal(signal.SIGINT, signal_handler)
     server.start_server()

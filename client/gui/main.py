@@ -18,11 +18,15 @@ class MainWindow(QMainWindow):
         self.client = client
         self.state = "matchmaking"
 
+        # connect to signal from client class, because qt gui can't be updated from a different thread
+        self.client.signal.connect(self.signal_handler)
+
+
         layout = QGridLayout()
         self.setWindowTitle("Main Screen")
         self.setFixedSize(1000, 800)
-        test = Matchmaking(client)
-        layout.addWidget(test, 0, 0)
+        self.matchmaking = Matchmaking(client)
+        layout.addWidget(self.matchmaking, 0, 0)
 
         self.switch_button = QPushButton("SCOREBOARD")
         if self.state == "scoreboard":
@@ -33,12 +37,18 @@ class MainWindow(QMainWindow):
         WrapperWidget.setLayout(layout)
         self.setCentralWidget(WrapperWidget)
 
+    def signal_handler(self, duple):
+        hanlder = duple[0]
+        message = duple[1]
+        print("in handler", message)
+        hanlder(message)
+
     def player_list (self, players):
         if self.state == "playerlist":
             print("playerlist function from player list")
         if self.state == "matchmaking":
             print("playerlist function from matchmaking")
-        pass
+            self.matchmaking.player_list(players)
 
     def match_req(self, player_id):
         mtch_rqst = QMessageBox(self)

@@ -11,11 +11,17 @@ from PyQt6.QtWidgets import (
 
 
 class Matchmaking(QWidget):
-    def player_list(self, players=[{"name": "THOMML",
-                                    "id": "5"}]):
+
+    def player_list(self, players=[]):
+
+        #inside_layout = self.scroll_area.layout()
+
+        #for i in reversed(range(layout.count())): 
+            #layout.itemAt(i).widget().setParent(None)
 
         inside_widget = QWidget()
         inside_layout = QVBoxLayout()
+        inside_widget.setLayout(inside_layout)
 
         self.scroll_area.setWidget(inside_widget)
         self.scroll_area.setWidgetResizable(True)
@@ -28,7 +34,8 @@ class Matchmaking(QWidget):
             names_widget.clicked.connect(self.name_clicked(player_id))
             inside_layout.addWidget(names_widget)
 
-        self.scroll_area.setLayout(inside_layout)
+        #self.clear_item(self.scroll_area)
+        #self.scroll_area.setLayout(inside_layout)
 
     def name_clicked(self, player_id):
         def inner():
