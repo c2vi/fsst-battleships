@@ -1,7 +1,7 @@
 import sys
 from .game import  Game
 from .playerlist import  Playerlist
-from .Scoreboard import  Scoreboard
+from .scoreboard import  Scoreboard
 from .matchmaking import Matchmaking
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
@@ -20,34 +20,44 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.client = client
         self.state = "matchmaking"
+        self.matchmaking = Matchmaking(client)
 
         # connect to signal from client class, because qt gui can't be updated from a different thread
         self.client.signal.connect(self.signal_handler)
 
-
-        layout = QGridLayout()
+        self.wrapper_layout = QGridLayout()
         self.setWindowTitle("Main Screen")
         self.setFixedSize(1000, 800)
-        self.matchmaking = Matchmaking(client)
-        layout.addWidget(self.matchmaking, 0, 0)
 
-        if self.state == "game":
-            Game(self)
-        if self.state == "playerlist":
-            Playerlist(self)
-        if self.state == "scoreboard":
-            Scoreboard(self)
+        self.game_widget = Game(self)
+        self.scoreboard_widget = Scoreboard(self)
+        self.playerlist_widget = Playerlist(self)
 
         WrapperWidget = QWidget()
-        WrapperWidget.setLayout(layout)
+        WrapperWidget.setLayout(self.wrapper_layout)
         self.setCentralWidget(WrapperWidget)
+
+        self.game_state()
 
     def signal_handler(self, duple):
         hanlder = duple[0]
         message = duple[1]
         hanlder(message)
 
-    def player_list (self, players):
+    def game_state(self):
+        if self.state == "game":
+            Game(self)
+            self.wrapper_layout.addWidget(self.game_widget, 0, 0)
+        if self.state == "playerlist":
+            Playerlist(self)
+            self.wrapper_layout.addWidget(self.playerlist_widget, 0, 0)
+        if self.state == "scoreboard":
+            Scoreboard(self)
+            self.wrapper_layout.addWidget(self.scoreboard_widget, 0, 0)
+        if self.state == "matchmaking":
+            self.wrapper_layout.addWidget(self.matchmaking, 0, 0)
+
+    def player_list(self, players):
         if self.state == "playerlist":
             pass
             #print("playerlist function from player list")
@@ -75,16 +85,45 @@ class MainWindow(QMainWindow):
             print("No")
 
     def match_req_cancel(self):
-        pass
+        match_request_cancel_box = QMessageBox(self)
+        match_request_cancel_box.setWindowTitle("Match Request Cancel")
+        txt = "press button to cancel match"  # later match-request
+        match_request_cancel_box.setText(txt)
+        match_request_cancel_box.setStandardButtons(QMessageBox.StandardButton.Cancel)
+        match_request_cancel_box.setStyleSheet(
+            "QLabel{min-width:300 px; font-size: 24px;} QPushButton{ width:100px; font-size: 14px; }")
+
+        button = match_request_cancel_box.exec()
+
+        button = QMessageBox.StandardButton(button)
+
+        if button == QMessageBox.StandardButton.Cancel:
+            print("game canceled")
+            txt_2 = "game canceled"
+            match_request_cancel_box.setText(txt_2)
 
     def match_ack(self):
-        pass
+        self.state = "game"
 
     def match_deny(self):
-        pass
+        match_deny_box = QMessageBox(self)
+        match_deny_box.setWindowTitle("Match deny")
+        txt = "match denied"  # later match-request
+        match_deny_box.setText(txt)
+        match_deny_box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        match_deny_box.setStyleSheet(
+            "QLabel{min-width:300 px; font-size: 24px;} QPushButton{ width:100px; font-size: 14px; }")
+
+        button = match_deny_box.exec()
+
+        button = QMessageBox.StandardButton(button)
+
+        if button == QMessageBox.StandardButton.Ok:
+            print("game denied")
+            self.state = "matchmaking"
 
     def game_start(self):
-        pass
+        self.state = "game"
 
     def game_cancel(self):
         pass

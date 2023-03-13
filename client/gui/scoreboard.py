@@ -27,13 +27,14 @@ class Scoreboard(QWidget):
         self.button_playerlist = QPushButton("PLAYERLIST")
         self.button_playerlist.clicked.connect(self.button_playerlist_clicked)
 
-        self.layout_playerlist = QGridLayout()
-        self.layout_playerlist.addWidget(self.scroll_area, 0, 0)
-        self.layout_playerlist.addWidget(self.button_game, 1, 1)
-        self.layout_playerlist.addWidget(self.button_scoreboard, 2, 1)
-        self.layout_playerlist.addWidget(self.button_playerlist, 3, 1)
+        self.layout_scoreboard = QGridLayout()
+        self.layout_scoreboard.addWidget(self.scroll_area, 0, 0)
+        self.layout_scoreboard.addWidget(self.button_game, 1, 1)
+        self.layout_scoreboard.addWidget(self.button_scoreboard, 2, 1)
+        self.layout_scoreboard.addWidget(self.button_playerlist, 3, 1)
 
-        self.setLayout(self.layout_playerlist)
+        scoreboard_widget = QWidget()
+        scoreboard_widget.setLayout(self.layout_scoreboard)
 
     def button_game_clicked(self):
         self.main.state = "game"

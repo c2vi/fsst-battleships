@@ -107,7 +107,8 @@ class Client(QWidget):
             "x": x,
             "y": y}
         self.send_server(dic)
-            
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    Client(app) 
+    Client(app)

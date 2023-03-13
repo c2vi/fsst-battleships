@@ -19,7 +19,6 @@ class Playerlist(QWidget):
 
         self.scroll_area = QScrollArea()
 
-
         self.button_game = QPushButton("GAME")
         self.button_game.clicked.connect(self.button_game_clicked)
         self.button_scoreboard = QPushButton("SCOREBOARD")
@@ -33,7 +32,8 @@ class Playerlist(QWidget):
         self.layout_playerlist.addWidget(self.button_scoreboard, 2, 1)
         self.layout_playerlist.addWidget(self.button_playerlist, 3, 1)
 
-        self.setLayout(self.layout_playerlist)
+        playerlist_widget = QWidget()
+        playerlist_widget.setLayout(self.layout_playerlist)
 
     def button_game_clicked(self):
         self.main.state = "game"
