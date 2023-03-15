@@ -167,7 +167,7 @@ class MainWindow(QMainWindow):
             self.centralWidget(self)
 
 
-if __name__ == "__Main__":
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
