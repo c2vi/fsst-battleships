@@ -12,10 +12,11 @@ from PyQt6.QtWidgets import (
 
 class Playerlist(QWidget):
 
-    def __init__(self, main):
+    def __init__(self, main, client):
         super().__init__()
         self.main = main
         self.main.state = "playerlist"
+        self.client = client
 
         self.scroll_area = QScrollArea()
 
@@ -45,12 +46,21 @@ class Playerlist(QWidget):
 
         inside_widget = QWidget()
         inside_layout = QVBoxLayout()
-
-        self.scroll_area.setLayout(inside_layout)
+        inside_widget.setLayout(inside_layout)
 
         self.scroll_area.setWidget(inside_widget)
         self.scroll_area.setWidgetResizable(True)
+
         for player in players:
-            txt = players["name"]
+            txt = player["name"]
+            player_id = player["id"]
             names_widget = QPushButton(txt)
+            names_widget.clicked.connect(self.name_clicked(player_id))
             inside_layout.addWidget(names_widget)
+
+    def name_clicked(self, player_id):
+        def inner():
+            print("test worked")
+            self.client.match_req(player_id)
+
+        return inner

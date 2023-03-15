@@ -18,8 +18,10 @@ def match_ack(player,msg,server):
     pass
 
 def match_req(player,msg,server):
-    pass
-
+    other_player = server.players[msg["player_id"]]
+    msg["player_id"] = player.Id
+    print(json.dumps(msg))
+    other_player.conn.send(json.dumps(msg).encode("utf-8") + b"\n")
 def match_deny(player,msg,server):
     pass
 

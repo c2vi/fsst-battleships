@@ -16,7 +16,7 @@ from PyQt6.QtWidgets import (
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, client=None):
+    def __init__(self, client):
         super().__init__()
         self.client = client
         self.state = "matchmaking"
@@ -39,12 +39,12 @@ class MainWindow(QMainWindow):
         self.game_state()
 
     def signal_handler(self, duple):
+        print("here")
         hanlder = duple[0]
         message = duple[1]
         hanlder(message)
 
     def game_state(self):
-        print("game_state_works")
         if self.state == "game":
             self.game_widget = Game(self)
             self.wrapper_layout.addWidget(self.game_widget, 0, 0)
@@ -56,33 +56,38 @@ class MainWindow(QMainWindow):
             self.wrapper_layout.addWidget(self.scoreboard_widget, 0, 0)
         if self.state == "matchmaking":
             print("matchmaking")
-            self.matchmaking_widget = Matchmaking(self)
+            self.matchmaking_widget = Matchmaking(self.client)
             self.wrapper_layout.addWidget(self.matchmaking_widget, 0, 0)
 
     def player_list(self, players):
+        self.players = players
         if self.state == "playerlist":
             pass
-            #print("playerlist function from player list")
+            print("playerlist function from player list")
         if self.state == "matchmaking":
-            #print("playerlist function from matchmaking")
-            self.matchmaking.player_list(players)
+            self.matchmaking_widget.player_list(players)
 
     def match_req(self, player_id):
+        print("match requested")
+        for player in self.players:
+            if player["id"] == player_id:
+                player_name = player["name"]
+                player_id = player["id"]
         mtch_rqst = QMessageBox(self)
         mtch_rqst.setWindowTitle("Match Request")
-        txt = "... requests a match!\n Play ...?"  # later match-request
+        txt = f"{player_name} with ID {player_id} requests a match!\nDo you accept?"  # later match-request
         mtch_rqst.setText(txt)
         mtch_rqst.setStandardButtons(
             QMessageBox.StandardButton.Yes
             | QMessageBox.StandardButton.No)
         mtch_rqst.setStyleSheet(
-            "QLabel{min-width:300 px; font-size: 24px;} QPushButton{ width:100px; font-size: 14px; }")
+            "QLabel{min-width:300 px; font-size: 18px;} QPushButton{ width:100px; font-size: 14px; }")
         button = mtch_rqst.exec()
         # Look up the button enum entry for the result.
         button = QMessageBox.StandardButton(button)
         if button == QMessageBox.StandardButton.Yes:
             # message needs to be send!
-            print("Yes")
+            self.client.match_ack(player_id)
         else:
             print("No")
 

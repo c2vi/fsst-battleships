@@ -20,8 +20,8 @@ class MessageHandler:
         player_list = msg["players"]
         self.gui.player_list(player_list)
 
-    def match_req(self,msg):
-        self.gui.match_req()
+    def match_req(self, msg):
+        self.gui.match_req(msg["player_id"])
 
     def match_req_cancel(self,msg):
         player_id = msg["player_id"]
@@ -60,7 +60,7 @@ class MessageHandler:
         print("Command not found!", msg)
 
     def handle_msg(self,message):
-        handler = self.commands.get(message["msg"] ,self.wrong_commands) #Checks if the function is there and executes them if yes 
+        handler = self.commands.get(message["msg"] ,self.wrong_commands) #Checks if the function is there and executes them if yes
         self.client.signal.emit((handler, message))
         
 
