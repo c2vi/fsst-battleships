@@ -1,4 +1,5 @@
 import json
+SHIP_COUNT = 10
 
 def player_list(player,msg,server):
     pass
@@ -53,17 +54,48 @@ def game_place_invalid(player,msg,server):
     rec_msg = json.dumps({"msg": "game_place_invalid", "player_id": player.Id}) + "\n"
     player.conn.sock.send(rec_msg.encode("utf-8"))
 
-def game_do_hit(player,msg,server):
-    pass
 
 def game_hit(player,msg,server):
-    pass
+    x = msg["x"]
+    y = msg["y"]
+    other_player = server.players.get(player.opponent_id)
+    cell_value = other_player.board[x][y]
+    if cell_value == " ":
+        # Missed
+        other_player.board[x][y] = "O"
+        rec_msg = json.dumps({"msg": "game_hit_miss", "player_id": player.Id, "x": x, "y": y}) + "\n"
+    elif cell_value == "S":
+        # Hit
+        other_player.board[x][y] = "X"
+        rec_msg = json.dumps({"msg": "game_hit_success", "player_id": player.Id, "x": x, "y": y}) + "\n"
+        player.score += 1
+        set_score(player, server, player.score)
+        if player.score == SHIP_COUNT:
+            # Player wins the game
+            rec_msg = json.dumps({"msg": "game_over", "player_id": player.Id, "result": "win"}) + "\n"
+            player.sock.send(rec_msg.encode("utf-8"))
+            other_player.sock.send(rec_msg.encode("utf-8"))
+            return
+    else:
+        # Already hit this cell
+        rec_msg = json.dumps({"msg": "error", "player_id": player.Id, "error_message": "This cell has already been hit."}) + "\n"
+        player.sock.send(rec_msg.encode("utf-8"))
+        return
+    other_player.sock.send(rec_msg.encode("utf-8"))
 
-def game_hit_success(player,msg,server):
-    pass
-
-def set_score(player,msg,server):
-    pass
+def game_hit_success(player, server, x, y):
+    other_player = server.players.get(player.opponent_id)
+    other_player.board[x][y] = "X"
+    rec_msg = json.dumps({"msg": "game_hit_success", "player_id": player.Id, "x": x, "y": y}) + "\n"
+    player.sock.send(rec_msg.encode("utf-8"))
+    other_player.sock.send(rec_msg.encode("utf-8"))
+    player.score += 1
+    set_score(player, server, player.score)
+    if player.score == SHIP_COUNT:
+        # Player wins the game
+        rec_msg = json.dumps({"msg": "game_over", "player_id": player.Id, "result": "win"}) + "\n"
+        player.sock.send(rec_msg.encode("utf-8"))
+        other_player.sock.send(rec_msg.encode("utf-8"))
 
 def error(player,msg,server):
 
