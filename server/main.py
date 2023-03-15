@@ -103,7 +103,9 @@ class Player():
         self.player_name = "No Name Yet"
 
 
-# class game():
+class game():
+    def ad(self):
+        self.pl = 0
 
 def signal_handler(sig, frame):
     print("recieved SIGINT")
