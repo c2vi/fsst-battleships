@@ -31,6 +31,7 @@ class PlaceShips(QWidget):
         for x in range(1, 13):
             for y in range(1, 13):
                 enemy_field_button = QPushButton()
+                #enemy_field_button.clicked.connect(self.enemy_button_clicked(enemy_field_button))
                 enemy_field_layout.addWidget(enemy_field_button, x, y)
 
         enemy_field_widget = QWidget()
@@ -60,3 +61,6 @@ class PlaceShips(QWidget):
 
     def button_scoreboard_clicked(self):
         self.main.state = "scoreboard"
+
+    def enemy_button_clicked(self, enemy_field_button):
+        enemy_field_button.setStyleSheet("background color:red")
