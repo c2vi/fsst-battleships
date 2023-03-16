@@ -1,6 +1,7 @@
 import sys
 from .game import  Game
 from .playerlist import  Playerlist
+from .placeships import  PlaceShips
 from .scoreboard import  Scoreboard
 from .matchmaking import Matchmaking
 from PyQt6.QtCore import Qt
@@ -39,7 +40,6 @@ class MainWindow(QMainWindow):
         self.game_state()
 
     def signal_handler(self, duple):
-        print("here")
         hanlder = duple[0]
         message = duple[1]
         hanlder(message)
@@ -48,6 +48,9 @@ class MainWindow(QMainWindow):
         if self.state == "game":
             self.game_widget = Game(self)
             self.wrapper_layout.addWidget(self.game_widget, 0, 0)
+        if self.state == "place-ships":
+            self.placeships_widget = PlaceShips(self)
+            self.wrapper_layout.addWidget(self.placeships_widget, 0, 0)
         if self.state == "playerlist":
             self.playerlist_widget = Playerlist(self)
             self.wrapper_layout.addWidget(self.playerlist_widget, 0, 0)
@@ -89,7 +92,7 @@ class MainWindow(QMainWindow):
             # message needs to be send!
             self.client.match_ack(player_id)
         else:
-            print("No")
+            self.client.match_deny(player_id)
 
     def match_req_cancel(self):
         match_request_cancel_box = QMessageBox(self)
@@ -111,6 +114,7 @@ class MainWindow(QMainWindow):
 
     def match_ack(self):
         self.state = "game"
+        self.game_state()
 
     def match_deny(self):
         match_deny_box = QMessageBox(self)
@@ -130,21 +134,17 @@ class MainWindow(QMainWindow):
             self.state = "matchmaking"
 
     def game_start(self):
-        self.state = "game"
+        self.state = "place-ships"
+        self.game_state()
 
     def game_cancel(self):
-        pass
-
-    def game_place(self):
-        pass
+        self.state = "player-list"
+        self.game_state()
 
     def game_place_invalid(self):
         pass
 
     def game_do_hit(self):
-        pass
-
-    def game_hit(self):
         pass
 
     def game_hit_success(self):

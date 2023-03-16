@@ -16,43 +16,45 @@ def match_req_cancel(player,msg,server):
     player.player_name = msg["name"]
 
     rec_msg = json.dumps({"msg": "match_req_cancel", "player_id": player.Id}) + "\n"
-    other_player = server.players.get(msg["player_Id"])
-    other_player.sock.send(rec_msg.encode("utf-8"))
+    other_player = server.players.get(msg["player_id"])
+    other_player.conn.send(rec_msg.encode("utf-8"))
 
 def match_ack(player,msg,server):
-    other_player = server.players.get(msg["player_Id"])
-    rec_msg = json.dumps({"msg": "game_start", "player_id" : player.Id, "player_id" : other_player}) + "\n"
+    other_player = server.players.get(msg["player_id"])
+    rec_msg = json.dumps({"msg": "game_start", "player_id" : player.Id, "other_player_id" : other_player.Id}) + "\n"
 
-    other_player.sock.send()
+    other_player.conn.send(rec_msg.encode("utf-8"))
+    player.conn.send(rec_msg.encode("utf-8"))
 
 def match_req(player,msg,server):
     other_player = server.players[msg["player_id"]]
     msg["player_id"] = player.Id
     print(json.dumps(msg))
     other_player.conn.send(json.dumps(msg).encode("utf-8") + b"\n")
+
 def match_deny(player,msg,server):
     rec_msg = json.dumps({"msg": "match_deny", "player_id": player.Id}) + "\n"
-    other_player = server.players.get(msg["player_Id"])
-    other_player.sock.send(rec_msg.encode("utf-8"))
+    other_player = server.players.get(msg["player_id"])
+    other_player.conn.send(rec_msg.encode("utf-8"))
 
 
 
 def game_cancel(player,msg,server):
     rec_msg = json.dumps({"msg": "match_deny", "player_id": player.Id}) + "\n"
-    other_player = server.players.get(msg["player_Id"])
-    other_player.sock.send(rec_msg.encode("utf-8"))
+    other_player = server.players.get(msg["player_id"])
+    other_player.conn.send(rec_msg.encode("utf-8"))
 
 def game_place(player,msg,server):
     rec_msg = json.dumps({"msg": "match_req", "player_id": player.Id}) + "\n"
-    other_player = server.players.get(msg["player_Id"])
-    other_player.sock.send(rec_msg.encode("utf-8"))
-    player.conn.sock.send(rec_msg.encode("utf-8"))
+    other_player = server.players.get(msg["player_id"])
+    other_player.conn.send(rec_msg.encode("utf-8"))
+    player.conn.conn.send(rec_msg.encode("utf-8"))
     player.game(server,rec_msg)
 
 
 def game_place_invalid(player,msg,server):
     rec_msg = json.dumps({"msg": "game_place_invalid", "player_id": player.Id}) + "\n"
-    player.conn.sock.send(rec_msg.encode("utf-8"))
+    player.conn.conn.send(rec_msg.encode("utf-8"))
 
 
 def game_hit(player,msg,server):
@@ -73,29 +75,29 @@ def game_hit(player,msg,server):
         if player.score == SHIP_COUNT:
             # Player wins the game
             rec_msg = json.dumps({"msg": "game_over", "player_id": player.Id, "result": "win"}) + "\n"
-            player.sock.send(rec_msg.encode("utf-8"))
-            other_player.sock.send(rec_msg.encode("utf-8"))
+            player.conn.send(rec_msg.encode("utf-8"))
+            other_player.conn.send(rec_msg.encode("utf-8"))
             return
     else:
         # Already hit this cell
         rec_msg = json.dumps({"msg": "error", "player_id": player.Id, "error_message": "This cell has already been hit."}) + "\n"
-        player.sock.send(rec_msg.encode("utf-8"))
+        player.conn.send(rec_msg.encode("utf-8"))
         return
-    other_player.sock.send(rec_msg.encode("utf-8"))
+    other_player.conn.send(rec_msg.encode("utf-8"))
 
 def game_hit_success(player, server, x, y):
     other_player = server.players.get(player.opponent_id)
     other_player.board[x][y] = "X"
     rec_msg = json.dumps({"msg": "game_hit_success", "player_id": player.Id, "x": x, "y": y}) + "\n"
-    player.sock.send(rec_msg.encode("utf-8"))
-    other_player.sock.send(rec_msg.encode("utf-8"))
+    player.conn.send(rec_msg.encode("utf-8"))
+    other_player.conn.send(rec_msg.encode("utf-8"))
     player.score += 1
     set_score(player, server, player.score)
     if player.score == SHIP_COUNT:
         # Player wins the game
         rec_msg = json.dumps({"msg": "game_over", "player_id": player.Id, "result": "win"}) + "\n"
-        player.sock.send(rec_msg.encode("utf-8"))
-        other_player.sock.send(rec_msg.encode("utf-8"))
+        player.conn.send(rec_msg.encode("utf-8"))
+        other_player.conn.send(rec_msg.encode("utf-8"))
 
 def error(player,msg,server):
 

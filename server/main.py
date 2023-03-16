@@ -16,14 +16,10 @@ def check_client_data(player, msg, server):
         "match_req_cancel": handle_msg.match_req_cancel,
         "match_ack": handle_msg.match_ack,
         "match_deny": handle_msg.match_deny,
-        "game_start": handle_msg.game_start,
         "game_cancel": handle_msg.game_cancel,
         "game_place": handle_msg.game_place,
         "game_place_invalid": handle_msg.game_place_invalid,
-        "game_do_hit": handle_msg.game_do_hit,
         "game_hit": handle_msg.game_hit,
-        "game_hit_success": handle_msg.game_hit_success,
-        "set_score": handle_msg.set_score,
         "error": handle_msg.error
 
     }

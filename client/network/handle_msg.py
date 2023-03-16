@@ -8,6 +8,7 @@ class MessageHandler:
         self.commands  = {"player_list": self.player_list,
                           "match_req": self.match_req,
                           "match_req_cancel": self.match_req_cancel,
+                          "match_deny": self.match_deny,
                           "game_start": self.game_start, 
                           "game_place_invalid": self.game_place_invalid,
                           "game_do_hit": self.game_do_hit,
@@ -23,14 +24,14 @@ class MessageHandler:
     def match_req(self, msg):
         self.gui.match_req(msg["player_id"])
 
+    def match_deny(self, msg):
+        self.gui.match_deny()
+
     def match_req_cancel(self,msg):
         player_id = msg["player_id"]
         self.gui.match_req_cancel()
 
     def game_start(self,msg):
-        boats = msg["boats"]
-        grid_size_x = msg["grid_size_x"]
-        grid_size_y = msg["grid_size_y"]
         self.gui.game_start()
 
     def game_place_invalid(self,msg):
