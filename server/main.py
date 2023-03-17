@@ -30,24 +30,38 @@ def check_client_data(player, msg, server):
     handler = handlers.get(msg["msg"], message_not_found)
     handler(player, msg, server)
 
+def client_disconnect(server):
+    print("Client Disconnected")
+    msg = json.dumps({"msg": "player_list", "players": server.get_players()}) + "\n"
+    try:
+        for player in server.players.values():
+            player.conn.send((msg + "").encode("utf-8"))
+    except:
+        del server.players[player.Id]
+        client_disconnect(server)
 
 def handle_socket(data, player):
     print("New Player connected")
     sock_file = player.conn.makefile("r")
     msg = json.dumps({"msg": "player_list", "players": data.get_players()}) + "\n"
 
-    for player in server.players.values():
-        player.conn.send((msg + "").encode("utf-8"))
+    try:
+        for player in server.players.values():
+            player.conn.send((msg + "").encode("utf-8"))
 
-    for line in sock_file:
-        print("GOT: ", line)
-        try:
-            msg = json.loads(line)
-        except:
-            msg = "what you sent was not valid JSON"
-            player.conn.send(msg.encode("utf-8"))
+        for line in sock_file:
+            print("GOT: ", line)
+            try:
+                msg = json.loads(line)
+            except:
+                msg = "what you sent was not valid JSON"
+                player.conn.send(msg.encode("utf-8"))
 
-        check_client_data(player, msg, data)
+            check_client_data(player, msg, data)
+    except:
+        print("Error in handling player", player.Id)
+        client_disconnect(data)
+        handle_socket(data, player)
 
 
 class Server():
