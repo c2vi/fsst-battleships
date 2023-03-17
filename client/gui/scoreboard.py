@@ -33,11 +33,12 @@ class Scoreboard(QWidget):
         self.layout_scoreboard.addWidget(self.button_scoreboard, 2, 1)
         self.layout_scoreboard.addWidget(self.button_playerlist, 3, 1)
 
-        scoreboard_widget = QWidget()
-        scoreboard_widget.setLayout(self.layout_scoreboard)
+        self.setLayout(self.layout_scoreboard)
 
     def button_game_clicked(self):
         self.main.state = "game"
+        self.main.game_state()
 
     def button_playerlist_clicked(self):
         self.main.state = "playerlist"
+        self.main.game_state()

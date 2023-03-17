@@ -50,10 +50,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.WrapperWidget)
 
         if self.state == "game":
-            #self.wrapper_layout.removeWidget(self.placeships_widget)
             self.game_widget = Game(self)
-            print("test worked")
-            self.wrapper_layout.removeItem(self.matchmaking_widget)
             self.wrapper_layout.addWidget(self.game_widget, 0, 0)
         if self.state == "place-ships":
             self.placeships_widget = PlaceShips(self)

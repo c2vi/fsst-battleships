@@ -53,14 +53,15 @@ class Game(QWidget):
         game_layout.addWidget(self.button_scoreboard, 1, 2)
         game_layout.addWidget(self.button_playerlist, 1, 3)
 
-        game_widget = QWidget()
-        game_widget.setLayout(game_layout)
+        self.setLayout(game_layout)
 
     def button_playerlist_clicked(self):
         self.main.state = "playerlist"
+        self.main.game_state()
 
     def button_scoreboard_clicked(self):
         self.main.state = "scoreboard"
+        self.main.game_state()
 
     def enemy_button_clicked(self, enemy_field_button):
         def inner():

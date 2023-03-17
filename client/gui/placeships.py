@@ -47,9 +47,11 @@ class PlaceShips(QWidget):
 
     def button_playerlist_clicked(self):
         self.main.state = "playerlist"
+        self.main.game_state()
 
     def button_scoreboard_clicked(self):
         self.main.state = "scoreboard"
+        self.main.game_state()
 
     def own_button_clicked(self, own_field_button):
         def inner():

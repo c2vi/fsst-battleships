@@ -33,14 +33,15 @@ class Playerlist(QWidget):
         self.layout_playerlist.addWidget(self.button_scoreboard, 2, 1)
         self.layout_playerlist.addWidget(self.button_playerlist, 3, 1)
 
-        playerlist_widget = QWidget()
-        playerlist_widget.setLayout(self.layout_playerlist)
+        self.setLayout(self.layout_playerlist)
 
     def button_game_clicked(self):
         self.main.state = "game"
+        self.main.game_state()
 
     def button_scoreboard_clicked(self):
         self.main.state = "scoreboard"
+        self.main.game_state()
 
     def player_list(self, players):
 
@@ -61,6 +62,5 @@ class Playerlist(QWidget):
     def name_clicked(self, player_id):
         def inner():
             print("test worked")
-            self.client.match_req(player_id)
 
         return inner

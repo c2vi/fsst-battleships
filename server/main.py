@@ -41,16 +41,16 @@ def client_disconnect(server):
         client_disconnect(server)
 
 def handle_socket(data, player):
-    print("New Player connected")
+    print("New Player connected: ", player.Id)
     sock_file = player.conn.makefile("r")
     msg = json.dumps({"msg": "player_list", "players": data.get_players()}) + "\n"
 
     try:
-        for player in server.players.values():
-            player.conn.send((msg + "").encode("utf-8"))
+        for pfusch_player in server.players.values():
+            pfusch_player.conn.send(msg.encode("utf-8"))
 
         for line in sock_file:
-            print("GOT: ", line)
+            print("FROM Player: ", player.Id, "GOT: ", line)
             try:
                 msg = json.loads(line)
             except:
@@ -58,9 +58,15 @@ def handle_socket(data, player):
                 player.conn.send(msg.encode("utf-8"))
 
             check_client_data(player, msg, data)
-    except:
-        print("Error in handling player", player.Id)
-        client_disconnect(data)
+    except BrokenPipeError as e:
+        try:
+            msg = json.dumps({"msg": "player_list", "players": data.get_players()}) + "\n"
+            for faulty_player in server.players.values():
+                faulty_player.conn.send(msg.encode("utf-8"))
+        except Exception as e:
+            print("Player", faulty_player.Id , "Disconnected", e)
+            del server.players[faulty_player.Id]
+
         handle_socket(data, player)
 
 
@@ -85,6 +91,7 @@ class Server():
             conn, self.addr = self.server.accept()
             player = Player(self.Id, conn)
             self.players[self.Id] = player
+            print("New Connection, ID:", self.Id)
             thread = threading.Thread(target=handle_socket, args=(self, player))
             thread.start()
             self.Id = self.Id + 1
