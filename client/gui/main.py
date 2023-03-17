@@ -21,21 +21,15 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.client = client
         self.state = "matchmaking"
+        self.matchmaking_widget = Matchmaking(self.client)
 
         # connect to signal from client class, because qt gui can't be updated from a different thread
         self.client.signal.connect(self.signal_handler)
 
-        self.wrapper_layout = QGridLayout()
         self.setWindowTitle("Main Screen")
         self.setFixedSize(1000, 800)
 
-        #self.game_widget = Game(self)
-        #self.scoreboard_widget = Scoreboard(self)
-        #self.playerlist_widget = Playerlist(self)
-
-        WrapperWidget = QWidget()
-        WrapperWidget.setLayout(self.wrapper_layout)
-        self.setCentralWidget(WrapperWidget)
+        self.WrapperWidget = QWidget()
 
         self.game_state()
 
@@ -45,24 +39,32 @@ class MainWindow(QMainWindow):
         hanlder(message)
 
     def game_state(self):
+
+        self.WrapperWidget.setParent(None)
+
+        self.WrapperWidget = QWidget()
+
+        self.wrapper_layout = QGridLayout()
+
+        self.WrapperWidget.setLayout(self.wrapper_layout)
+        self.setCentralWidget(self.WrapperWidget)
+
         if self.state == "game":
             #self.wrapper_layout.removeWidget(self.placeships_widget)
             self.game_widget = Game(self)
             print("test worked")
-            self.wrapper_layout.removeWidget(self.matchmaking_widget)
+            self.wrapper_layout.removeItem(self.matchmaking_widget)
             self.wrapper_layout.addWidget(self.game_widget, 0, 0)
         if self.state == "place-ships":
             self.placeships_widget = PlaceShips(self)
             self.wrapper_layout.addWidget(self.placeships_widget, 0, 0)
         if self.state == "playerlist":
-            self.playerlist_widget = Playerlist(self)
+            self.playerlist_widget = Playerlist(self, self.client)
             self.wrapper_layout.addWidget(self.playerlist_widget, 0, 0)
         if self.state == "scoreboard":
             self.scoreboard_widget = Scoreboard(self)
             self.wrapper_layout.addWidget(self.scoreboard_widget, 0, 0)
         if self.state == "matchmaking":
-            print("matchmaking")
-            self.matchmaking_widget = Matchmaking(self.client)
             self.wrapper_layout.addWidget(self.matchmaking_widget, 0, 0)
 
     def player_list(self, players):

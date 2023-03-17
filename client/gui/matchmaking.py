@@ -32,15 +32,16 @@ class Matchmaking(QWidget):
             txt = player["name"]
             player_id = player["id"]
             names_widget = QPushButton(txt)
-            names_widget.clicked.connect(self.name_clicked(player_id))
+            names_widget.clicked.connect(self.name_clicked(player_id, names_widget))
             inside_layout.addWidget(names_widget)
 
         #self.clear_item(self.scroll_area)
         #self.scroll_area.setLayout(inside_layout)
 
-    def name_clicked(self, player_id):
+    def name_clicked(self, player_id, names_widget):
         def inner():
             self.client.match_req(player_id)
+            names_widget.setEnabled(False)
 
         return inner
 
