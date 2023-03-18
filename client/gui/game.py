@@ -30,6 +30,10 @@ class Game(QWidget):
         for x in range(1, 13):
             for y in range(1, 13):
                 enemy_field_button = QPushButton()
+                enemy_field_button.x = x
+                enemy_field_button.y = y
+                enemy_field_button.setEnabled(False)
+                self.main.enemy_field_button_array.append(enemy_field_button)
                 enemy_field_button.clicked.connect(self.enemy_button_clicked(enemy_field_button))
                 enemy_field_layout.addWidget(enemy_field_button, x, y)
 
@@ -64,8 +68,11 @@ class Game(QWidget):
         self.main.game_state()
 
     def enemy_button_clicked(self, enemy_field_button):
-        self.main.game_hit_success(enemy_field_button)
-        #def inner():
-         #   print("color test worked")
-          #  enemy_field_button.setStyleSheet("background-color:red")
-        #return inner
+
+        def inner():
+            enemy_field_button.setStyleSheet("background-color:red")
+            self.main.client.game_hit(enemy_field_button.x, enemy_field_button.y)
+            for button in self.main.enemy_field_button_array:
+                button.setEnabled(False)
+            print("color test worked")
+        return inner
