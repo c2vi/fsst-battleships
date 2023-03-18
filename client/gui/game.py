@@ -64,7 +64,8 @@ class Game(QWidget):
         self.main.game_state()
 
     def enemy_button_clicked(self, enemy_field_button):
-        def inner():
-            print("color test worked")
-            enemy_field_button.setStyleSheet("background-color:red")
-        return inner
+        self.main.game_hit_success(enemy_field_button)
+        #def inner():
+         #   print("color test worked")
+          #  enemy_field_button.setStyleSheet("background-color:red")
+        #return inner

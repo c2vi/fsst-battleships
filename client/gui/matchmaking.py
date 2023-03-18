@@ -75,9 +75,4 @@ class Matchmaking(QWidget):
 
     def button_clicked(self):
         name = self.widget_lne_nme.text()
-
-        #self.client.socket.send("HELLOOOOOOOOOOOOOOOOOOOOOOOOOOO".encode("utf-8"))
-
         self.client.set_name(name)
-
-

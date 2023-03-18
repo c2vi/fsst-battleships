@@ -20,9 +20,11 @@ class PlaceShips(QWidget):
         self.button_game = QPushButton("GAME")
         self.button_game.setEnabled(False)
         self.button_scoreboard = QPushButton("SCOREBOARD")
-        self.button_scoreboard.clicked.connect(self.button_scoreboard_clicked)
+        self.button_scoreboard.setEnabled(False)
         self.button_playerlist = QPushButton("PLAYERLIST")
-        self.button_playerlist.clicked.connect(self.button_playerlist_clicked)
+        self.button_playerlist.setEnabled(False)
+        self.button_done = QPushButton("DONE")
+        self.button_done.clicked.connect(self.button_done_clicked)
 
         enemy_field_layout = QGridLayout()
 
@@ -42,6 +44,7 @@ class PlaceShips(QWidget):
         game_layout.addWidget(self.button_game, 1, 1)
         game_layout.addWidget(self.button_scoreboard, 1, 2)
         game_layout.addWidget(self.button_playerlist, 1, 3)
+        game_layout.addWidget(self.button_done, 1, 0)
 
         self.setLayout(game_layout)
 
@@ -52,6 +55,11 @@ class PlaceShips(QWidget):
     def button_scoreboard_clicked(self):
         self.main.state = "scoreboard"
         self.main.game_state()
+
+    def button_done_clicked(self):
+        self.main.state = "game"
+        # you need to parse an array with the coordinates of the ships, if you don't the client crashes!
+        self.main.client.game_place()
 
     def own_button_clicked(self, own_field_button):
         def inner():

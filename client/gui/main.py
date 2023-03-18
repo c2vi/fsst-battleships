@@ -67,7 +67,7 @@ class MainWindow(QMainWindow):
     def player_list(self, players):
         self.players = players
         if self.state == "playerlist":
-            pass
+            self.playerlist_widget.player_list(players)
             print("playerlist function from player list")
         if self.state == "matchmaking":
             self.matchmaking_widget.player_list(players)
@@ -149,7 +149,11 @@ class MainWindow(QMainWindow):
     def game_do_hit(self):
         pass
 
-    def game_hit_success(self):
+    def game_hit_success(self, enemy_field_button):
+        def inner():
+            print("color test worked")
+            enemy_field_button.setStyleSheet("background-color:green")
+        return inner
         pass
 
     def set_score(self):

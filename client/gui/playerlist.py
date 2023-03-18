@@ -34,6 +34,7 @@ class Playerlist(QWidget):
         self.layout_playerlist.addWidget(self.button_playerlist, 3, 1)
 
         self.setLayout(self.layout_playerlist)
+        self.player_list()
 
     def button_game_clicked(self):
         self.main.state = "game"
@@ -43,7 +44,7 @@ class Playerlist(QWidget):
         self.main.state = "scoreboard"
         self.main.game_state()
 
-    def player_list(self, players):
+    def player_list(self, players=[]):
 
         inside_widget = QWidget()
         inside_layout = QVBoxLayout()
@@ -52,15 +53,16 @@ class Playerlist(QWidget):
         self.scroll_area.setWidget(inside_widget)
         self.scroll_area.setWidgetResizable(True)
 
-        for player in players:
+        for player in self.main.players:
             txt = player["name"]
             player_id = player["id"]
             names_widget = QPushButton(txt)
-            names_widget.clicked.connect(self.name_clicked(player_id))
+            names_widget.clicked.connect(self.name_clicked(player_id, names_widget))
             inside_layout.addWidget(names_widget)
 
-    def name_clicked(self, player_id):
+    def name_clicked(self, player_id, names_widget):
         def inner():
-            print("test worked")
+            self.client.match_req(player_id)
+            names_widget.setEnabled(False)
 
         return inner
