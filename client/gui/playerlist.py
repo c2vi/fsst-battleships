@@ -30,8 +30,8 @@ class Playerlist(QWidget):
         self.layout_playerlist = QGridLayout()
         self.layout_playerlist.addWidget(self.scroll_area, 0, 0)
         self.layout_playerlist.addWidget(self.button_game, 1, 1)
-        self.layout_playerlist.addWidget(self.button_scoreboard, 2, 1)
-        self.layout_playerlist.addWidget(self.button_playerlist, 3, 1)
+        self.layout_playerlist.addWidget(self.button_scoreboard, 1, 2)
+        self.layout_playerlist.addWidget(self.button_playerlist, 1, 3)
 
         self.setLayout(self.layout_playerlist)
         self.player_list()
