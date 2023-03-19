@@ -56,9 +56,9 @@ class Game(QWidget):
         game_layout = QGridLayout()
         game_layout.addWidget(enemy_field_widget, 0, 1)
         game_layout.addWidget(own_field_widget, 0, 0)
-        game_layout.addWidget(self.button_game, 1, 1)
-        game_layout.addWidget(self.button_scoreboard, 1, 2)
-        game_layout.addWidget(self.button_playerlist, 1, 3)
+        game_layout.addWidget(self.button_game, 1, 2)
+        game_layout.addWidget(self.button_scoreboard, 1, 3)
+        game_layout.addWidget(self.button_playerlist, 1, 4)
 
         self.setLayout(game_layout)
 
