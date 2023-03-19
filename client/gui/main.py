@@ -148,8 +148,8 @@ class MainWindow(QMainWindow):
     def game_place_invalid(self):
         pass
 
-    def game_hit(self):
-        for ship in self.placeships_array:
+    def game_hit(self, x, y):
+        for ship in self.enemy_field_button_array:
             if ship.x == x and ship.y == y:
                 ship.setStyleSheet("background-color:red")
                 print("game hit test worked")
