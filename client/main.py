@@ -96,7 +96,7 @@ class Client(QWidget):
 
     def game_place(self,ships):
         dic = {
-            "msg":"game_cancel",
+            "msg":"game_place",
             "ships": ships
         }
         self.send_server(dic)

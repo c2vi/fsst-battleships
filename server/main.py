@@ -10,7 +10,6 @@ import signal
 def check_client_data(player, msg, server):
     handlers = {
 
-        "player_list": handle_msg.player_list,
         "set_name": handle_msg.set_name,
         "match_req": handle_msg.match_req,
         "match_req_cancel": handle_msg.match_req_cancel,
@@ -18,7 +17,6 @@ def check_client_data(player, msg, server):
         "match_deny": handle_msg.match_deny,
         "game_cancel": handle_msg.game_cancel,
         "game_place": handle_msg.game_place,
-        "game_place_invalid": handle_msg.game_place_invalid,
         "game_hit": handle_msg.game_hit,
         "error": handle_msg.error
 

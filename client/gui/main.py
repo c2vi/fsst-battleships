@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
         self.client.signal.connect(self.signal_handler)
 
         self.setWindowTitle("Main Screen")
-        self.setFixedSize(1000, 800)
+        self.setFixedSize(1000, 600)
 
         self.WrapperWidget = QWidget()
 
@@ -155,6 +155,7 @@ class MainWindow(QMainWindow):
                 print("game hit test worked")
 
     def game_do_hit(self):
+        print("DO HIT")
         for button in self.enemy_field_button_array:
             button.setEnabled(True)
 

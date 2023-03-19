@@ -46,7 +46,6 @@ class Game(QWidget):
             for y in range(1, 13):
                 own_field_button = QPushButton()
                 own_field_layout.addWidget(own_field_button, x, y)
-                print(self.main.placeships_array)
                 if self.main.placeships_array[x][y] == "X":
                     own_field_button.setStyleSheet("background-color:blue")
 

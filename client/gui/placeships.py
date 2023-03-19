@@ -116,7 +116,6 @@ class PlaceShips(QWidget):
 
     def Offset(self, ship, x, y):
         def Inner():
-            print("Offset",ship.map)
             self.selected_ship = ship
             self.selected_x = x
             self.selected_y = y
@@ -165,11 +164,9 @@ class PlaceShips(QWidget):
                     new_x = absolut_x + posx
                     new_y = absolut_y + posy
 
-                    print(self.selected_ship.map,posx,posy)
 
                     if self.selected_ship.map[posx][posy] == "X":
                         self.main.placeships_array[new_x][new_y] = "X"
-                        print(self.main.placeships_array)
                         for Button in self.own_field_Buttons:
                             if new_x == Button.x and new_y == Button.y:
                                 Button.setStyleSheet("background-color:blue")

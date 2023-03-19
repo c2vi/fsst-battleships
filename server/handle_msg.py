@@ -15,8 +15,8 @@ def match_req_cancel(player,msg,server):
 
 def match_ack(player,msg,server):
     other_player = server.players.get(msg["player_id"])
-    player.opponent_id = other_player.id
-    other_player.opponent_id = player.id
+    player.opponent_id = other_player.Id
+    other_player.opponent_id = player.Id
     player.has_placed = False
     other_player.has_placed = False
     rec_msg = json.dumps({"msg": "game_start", "player_id" : player.Id, "other_player_id" : other_player.Id}) + "\n"
@@ -41,9 +41,12 @@ def game_cancel(player,msg,server):
 
 def game_place(player,msg,server):
     player.has_placed = True
+    player.board = msg["ships"]
     other_player = server.players.get(player.opponent_id)
     if other_player.has_placed == True: 
         rec_msg = json.dumps({"msg": "game_do_hit", "player_id": player.Id}) + "\n"
+        player.conn.send(rec_msg.encode("utf-8"))
+
     # - set player.has_placed to true
     # - if the other player in that game has already placed his ships, then send a game_do_hit to player
     # - you can get the other player by: server.players[player.opponent_id]
@@ -58,7 +61,7 @@ def game_hit(player,msg,server):
         other_player.board[x][y] = "O"
         rec_msg = json.dumps({"msg": "game_hit_miss", "player_id": player.Id, "x": x, "y": y}) + "\n"
         # TODO: send game_do_hit to the other_player
-        other_player.conn.send = json.dumps({"msg": "game_do_hit", "player_id": player.Id}) + "\n"
+        other_player.conn.send((json.dumps({"msg": "game_do_hit", "player_id": player.Id}) + "\n").encode("utf-8"))
        
 
     elif cell_value == "S":
