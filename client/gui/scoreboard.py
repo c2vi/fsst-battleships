@@ -16,6 +16,7 @@ class Scoreboard(QWidget):
         super().__init__()
 
         self.main = main
+        self.main.client = self.client
         self.state = "scoreboard"
 
         self.scroll_area = QScrollArea()

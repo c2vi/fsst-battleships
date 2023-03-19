@@ -22,6 +22,8 @@ class MainWindow(QMainWindow):
         self.client = client
         self.state = "matchmaking"
         self.matchmaking_widget = Matchmaking(self.client)
+        self.enemy_field_button_array = []
+        self.placeships_array = [[" "] * 13] * 13
 
         # connect to signal from client class, because qt gui can't be updated from a different thread
         self.client.signal.connect(self.signal_handler)
@@ -146,15 +148,21 @@ class MainWindow(QMainWindow):
     def game_place_invalid(self):
         pass
 
-    def game_do_hit(self):
-        pass
+    def game_hit(self):
+        for ship in self.placeships_array:
+            if ship.x == x and ship.y == y:
+                ship.setStyleSheet("background-color:red")
+                print("color test worked")
 
-    def game_hit_success(self, enemy_field_button):
-        def inner():
-            print("color test worked")
-            enemy_field_button.setStyleSheet("background-color:green")
-        return inner
-        pass
+    def game_do_hit(self):
+        for button in self.enemy_field_button_array:
+            button.setEnabled(True)
+
+    def game_hit_success(self, x, y):
+        for button in self.enemy_field_button_array:
+            if button.x == x and button.y == y:
+                button.setStyleSheet("background-color:green")
+                print("color test worked")
 
     def set_score(self):
         txt = "test score : 25" # placeholder, later set_score
