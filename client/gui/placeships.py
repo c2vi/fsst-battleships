@@ -62,17 +62,17 @@ class PlaceShips(QWidget):
 
 
         self.ship_map_flug = [
+            ["X"," "," "," "," "," "," "],
             ["X","X"," "," "," "," "," "],
-            [" ","X","X"," "," "," "," "],
-            [" "," "," "," "," "," "," "],
+            [" ","X"," "," "," "," "," "],
             [" "," "," "," "," "," "," "],
             [" "," "," "," "," "," "," "],
             [" "," "," "," "," "," "," "],
             [" "," "," "," "," "," "," "],
         ]
         self.ship_map_zweier = [
-            ["X","X"," "," "," "," "," "],
-            [" "," "," "," "," "," "," "],
+            ["X"," "," "," "," "," "," "],
+            ["X"," "," "," "," "," "," "],
             [" "," "," "," "," "," "," "],
             [" "," "," "," "," "," "," "],
             [" "," "," "," "," "," "," "],
@@ -80,9 +80,9 @@ class PlaceShips(QWidget):
             [" "," "," "," "," "," "," "],
         ]
         self.ship_map_dreier = [
-            ["X", "X", "X", " ", " ", " ", " "],
-            [" ", " ", " ", " ", " ", " ", " "],
-            [" ", " ", " ", " ", " ", " ", " "],
+            ["X", " ", " ", " ", " ", " ", " "],
+            ["X", " ", " ", " ", " ", " ", " "],
+            ["X", " ", " ", " ", " ", " ", " "],
             [" ", " ", " ", " ", " ", " ", " "],
             [" ", " ", " ", " ", " ", " ", " "],
             [" ", " ", " ", " ", " ", " ", " "],
@@ -133,7 +133,7 @@ class PlaceShips(QWidget):
         for x in range(0, 6):
             for y in range(0, 6):
                 ship_piece = QPushButton()
-                if ship_map[x][y] == "X":
+                if ship_map[y][x] == "X":
 
                     ship_layout.addWidget(ship_piece, y, x)
                     ship_piece.clicked.connect(self.Offset(ship, y, x))
@@ -145,12 +145,12 @@ class PlaceShips(QWidget):
     def place_ship(self,x,y):
 
         def inner():
-            print("inner")
             absolut_x = x - self.selected_x
             absolut_y = y - self.selected_y
+            self.selected_ship.setParent(None)
             for posx in range(0, 6):
                 for posy in range(0, 6):
-                    print("forloop")
+
                     new_x = absolut_x + posx
                     new_y = absolut_y + posy
 
@@ -166,7 +166,7 @@ class PlaceShips(QWidget):
 
 
 
-
+            self.selected_ship = None
         return inner
 
     def button_playerlist_clicked(self):
