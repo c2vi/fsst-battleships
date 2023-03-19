@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
         self.state = "matchmaking"
         self.matchmaking_widget = Matchmaking(self.client)
         self.enemy_field_button_array = []
-        self.placeships_array = []
+        self.placeships_array = [[" "] * 13] * 13
 
         # connect to signal from client class, because qt gui can't be updated from a different thread
         self.client.signal.connect(self.signal_handler)
