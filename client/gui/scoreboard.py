@@ -16,7 +16,6 @@ class Scoreboard(QWidget):
         super().__init__()
 
         self.main = main
-        self.main.client = self.client
         self.state = "scoreboard"
 
         self.scroll_area = QScrollArea()
@@ -31,8 +30,8 @@ class Scoreboard(QWidget):
         self.layout_scoreboard = QGridLayout()
         self.layout_scoreboard.addWidget(self.scroll_area, 0, 0)
         self.layout_scoreboard.addWidget(self.button_game, 1, 1)
-        self.layout_scoreboard.addWidget(self.button_scoreboard, 2, 1)
-        self.layout_scoreboard.addWidget(self.button_playerlist, 3, 1)
+        self.layout_scoreboard.addWidget(self.button_scoreboard, 1, 2)
+        self.layout_scoreboard.addWidget(self.button_playerlist, 1,3)
 
         self.setLayout(self.layout_scoreboard)
 
