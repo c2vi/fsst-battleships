@@ -15,6 +15,7 @@ class Matchmaking(QWidget):
 
     def player_list(self, players=[]):
 
+
         #inside_layout = self.scroll_area.layout()
 
         #for i in reversed(range(layout.count())): 
@@ -31,20 +32,20 @@ class Matchmaking(QWidget):
             txt = player["name"]
             player_id = player["id"]
             names_widget = QPushButton(txt)
-            names_widget.clicked.connect(self.name_clicked(player_id))
+            names_widget.clicked.connect(self.name_clicked(player_id, names_widget))
             inside_layout.addWidget(names_widget)
 
         #self.clear_item(self.scroll_area)
         #self.scroll_area.setLayout(inside_layout)
 
-    def name_clicked(self, player_id):
+    def name_clicked(self, player_id, names_widget):
         def inner():
-            print("test worked")
             self.client.match_req(player_id)
+            names_widget.setEnabled(False)
 
         return inner
 
-    def __init__(self, client=None):
+    def __init__(self, client):
         super().__init__()
 
         # define line widget where user can enter name
@@ -63,8 +64,6 @@ class Matchmaking(QWidget):
         font.setPointSize(30)
         widget_nme_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-
-
         self.layout_mtchmkng = QGridLayout()
         self.layout_mtchmkng.addWidget(widget_nme_lbl, 0, 0)
         self.layout_mtchmkng.addWidget(self.widget_lne_nme, 0, 1)
@@ -75,10 +74,5 @@ class Matchmaking(QWidget):
         self.player_list()
 
     def button_clicked(self):
-        print("START GAME")
         name = self.widget_lne_nme.text()
-        #self.client.socket.send("HELLOOOOOOOOOOOOOOOOOOOOOOOOOOO".encode("utf-8"))
-
         self.client.set_name(name)
-
-

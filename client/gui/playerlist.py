@@ -10,12 +10,15 @@ from PyQt6.QtWidgets import (
 )
 
 
-class playerlist(QWidget):
+class Playerlist(QWidget):
 
-    def __init__(self):
+    def __init__(self, main, client):
         super().__init__()
+        self.main = main
+        self.main.state = "playerlist"
+        self.client = client
+
         self.scroll_area = QScrollArea()
-        self.state = "playerlist"
 
         self.button_game = QPushButton("GAME")
         self.button_game.clicked.connect(self.button_game_clicked)
@@ -27,27 +30,39 @@ class playerlist(QWidget):
         self.layout_playerlist = QGridLayout()
         self.layout_playerlist.addWidget(self.scroll_area, 0, 0)
         self.layout_playerlist.addWidget(self.button_game, 1, 1)
-        self.layout_playerlist.addWidget(self.button_scoreboard, 2, 1)
-        self.layout_playerlist.addWidget(self.button_playerlist, 3, 1)
+        self.layout_playerlist.addWidget(self.button_scoreboard, 1, 2)
+        self.layout_playerlist.addWidget(self.button_playerlist, 1, 3)
 
         self.setLayout(self.layout_playerlist)
+        self.player_list()
 
     def button_game_clicked(self):
-        self.state = "game"
+        self.main.state = "game"
+        self.main.game_state()
 
     def button_scoreboard_clicked(self):
-        self.state = "scoreboard"
+        self.main.state = "scoreboard"
+        self.main.game_state()
 
-    def player_list(self, players):
+    def player_list(self, players=[]):
 
         inside_widget = QWidget()
         inside_layout = QVBoxLayout()
-
-        self.scroll_area.setLayout(inside_layout)
+        inside_widget.setLayout(inside_layout)
 
         self.scroll_area.setWidget(inside_widget)
         self.scroll_area.setWidgetResizable(True)
-        for player in players:
-            txt = players["name"]
+
+        for player in self.main.players:
+            txt = player["name"]
+            player_id = player["id"]
             names_widget = QPushButton(txt)
+            names_widget.clicked.connect(self.name_clicked(player_id, names_widget))
             inside_layout.addWidget(names_widget)
+
+    def name_clicked(self, player_id, names_widget):
+        def inner():
+            self.client.match_req(player_id)
+            names_widget.setEnabled(False)
+
+        return inner

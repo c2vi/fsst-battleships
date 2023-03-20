@@ -10,20 +10,14 @@ import signal
 def check_client_data(player, msg, server):
     handlers = {
 
-        "player_list": handle_msg.player_list,
         "set_name": handle_msg.set_name,
         "match_req": handle_msg.match_req,
         "match_req_cancel": handle_msg.match_req_cancel,
         "match_ack": handle_msg.match_ack,
         "match_deny": handle_msg.match_deny,
-        "game_start": handle_msg.game_start,
         "game_cancel": handle_msg.game_cancel,
         "game_place": handle_msg.game_place,
-        "game_place_invalid": handle_msg.game_place_invalid,
-        "game_do_hit": handle_msg.game_do_hit,
         "game_hit": handle_msg.game_hit,
-        "game_hit_success": handle_msg.game_hit_success,
-        "set_score": handle_msg.set_score,
         "error": handle_msg.error
 
     }
@@ -34,24 +28,44 @@ def check_client_data(player, msg, server):
     handler = handlers.get(msg["msg"], message_not_found)
     handler(player, msg, server)
 
+def client_disconnect(server):
+    print("Client Disconnected")
+    msg = json.dumps({"msg": "player_list", "players": server.get_players()}) + "\n"
+    try:
+        for player in server.players.values():
+            player.conn.send((msg + "").encode("utf-8"))
+    except:
+        del server.players[player.Id]
+        client_disconnect(server)
 
 def handle_socket(data, player):
-    print("New Player connected")
+    print("New Player connected: ", player.Id)
     sock_file = player.conn.makefile("r")
     msg = json.dumps({"msg": "player_list", "players": data.get_players()}) + "\n"
 
-    for player in server.players.values():
-        player.conn.send((msg + "").encode("utf-8"))
+    try:
+        for pfusch_player in server.players.values():
+            pfusch_player.conn.send(msg.encode("utf-8"))
 
-    for line in sock_file:
-        print("GOT: ", line)
+        for line in sock_file:
+            print("FROM Player: ", player.Id, "GOT: ", line)
+            try:
+                msg = json.loads(line)
+            except:
+                msg = "what you sent was not valid JSON"
+                player.conn.send(msg.encode("utf-8"))
+
+            check_client_data(player, msg, data)
+    except BrokenPipeError as e:
         try:
-            msg = json.loads(line)
-        except:
-            msg = "what you sent was not valid JSON"
-            player.conn.send(msg.encode("utf-8"))
+            msg = json.dumps({"msg": "player_list", "players": data.get_players()}) + "\n"
+            for faulty_player in server.players.values():
+                faulty_player.conn.send(msg.encode("utf-8"))
+        except Exception as e:
+            print("Player", faulty_player.Id , "Disconnected", e)
+            del server.players[faulty_player.Id]
 
-        check_client_data(player, msg, data)
+        handle_socket(data, player)
 
 
 class Server():
@@ -75,6 +89,7 @@ class Server():
             conn, self.addr = self.server.accept()
             player = Player(self.Id, conn)
             self.players[self.Id] = player
+            print("New Connection, ID:", self.Id)
             thread = threading.Thread(target=handle_socket, args=(self, player))
             thread.start()
             self.Id = self.Id + 1
@@ -98,12 +113,15 @@ class Player():
 
     def __init__(self, Id, conn):
         super().__init__()
+        self.score = 0
         self.Id = Id
         self.conn = conn
         self.player_name = "No Name Yet"
 
 
-# class game():
+class game():
+    def ad(self):
+        self.pl = 0
 
 def signal_handler(sig, frame):
     print("recieved SIGINT")
