@@ -98,6 +98,32 @@ class MainWindow(QMainWindow):
         else:
             self.client.match_deny(player_id)
 
+    def game_over(self, msg):
+        print("Game Over")
+
+        mtch_rqst = QMessageBox(self)
+        mtch_rqst.setWindowTitle("Game Over")
+        if msg["result"] == "win":
+            txt = "You Won"
+        else:
+            txt = "You Lost"
+
+        mtch_rqst.setText(txt)
+        mtch_rqst.setStandardButtons(
+            QMessageBox.StandardButton.Yes
+            | QMessageBox.StandardButton.No)
+        mtch_rqst.setStyleSheet(
+            "QLabel{min-width:300 px; font-size: 18px;} QPushButton{ width:100px; font-size: 14px; }")
+        button = mtch_rqst.exec()
+        # Look up the button enum entry for the result.
+        button = QMessageBox.StandardButton(button)
+        if button == QMessageBox.StandardButton.Yes:
+            self.state == "scoreboard"
+            self.game_state()
+        else:
+            self.state == "scoreboard"
+            self.game_state()
+
     def match_req_cancel(self):
         match_request_cancel_box = QMessageBox(self)
         match_request_cancel_box.setWindowTitle("Match Request Cancel")

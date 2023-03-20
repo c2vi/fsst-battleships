@@ -1,5 +1,5 @@
 import json
-SHIP_COUNT = 10
+SHIP_COUNT = 13
 
 def set_name(player,msg,server):
     player.player_name = msg["name"]
@@ -56,6 +56,7 @@ def game_hit(player,msg,server):
     y = msg["y"]
     other_player = server.players.get(player.opponent_id)
     cell_value = other_player.board[x][y]
+    print("CELL", cell_value)
     if cell_value == " ":
         # Missed
         other_player.board[x][y] = "O"
@@ -64,13 +65,14 @@ def game_hit(player,msg,server):
         other_player.conn.send((json.dumps({"msg": "game_do_hit", "player_id": player.Id}) + "\n").encode("utf-8"))
        
 
-    elif cell_value == "S":
+    elif cell_value == "X":
         # Hit
-        other_player.board[x][y] = "X"
+        other_player.board[x][y] = "H"
         rec_msg = json.dumps({"msg": "game_hit_success", "player_id": player.Id, "x": x, "y": y}) + "\n"
         player.score += 1
-        if player.score == SHIP_COUNT:
+        if has_player_won(other_player):
             # Player wins the game
+            player.conn.send(rec_msg.encode("utf-8"))
             rec_msg = json.dumps({"msg": "game_over", "player_id": player.Id, "result": "win"}) + "\n"
             player.conn.send(rec_msg.encode("utf-8"))
             # TODO: send a message with result: "lose" to the other_player
@@ -80,8 +82,8 @@ def game_hit(player,msg,server):
         else:
             # TODO: send game_do_hit to the this player, so that he can do another hit.
             # replace the pass with some code
-            rec_msg = json.dumps({"msg": "game_hit_miss", "player_id": player.Id, "x": x, "y": y}) + "\n"
             player.conn.send(rec_msg.encode("utf-8"))
+            player.conn.send((json.dumps({"msg": "game_do_hit", "player_id": player.Id}) + "\n").encode("utf-8"))
 
     else:
         # Already hit this cell
@@ -92,3 +94,11 @@ def game_hit(player,msg,server):
 def error(player,msg,server):
     #TODO: print "ERROR: " and the msg
     print ("Error:" + msg)
+
+def has_player_won(player):
+    for x in range(0,len(player.board)):
+        for y in range(0,len(player.board)):
+            if player.board[x][y] == "X":
+                return False
+    return True
+

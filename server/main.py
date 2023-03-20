@@ -113,6 +113,7 @@ class Player():
 
     def __init__(self, Id, conn):
         super().__init__()
+        self.score = 0
         self.Id = Id
         self.conn = conn
         self.player_name = "No Name Yet"

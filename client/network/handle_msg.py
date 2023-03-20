@@ -14,6 +14,7 @@ class MessageHandler:
                           "game_do_hit": self.game_do_hit,
                           "game_hit_success": self.game_hit_success,
                           "set_score": self.set_score,
+                          "game_over": self.game_over,
                           "error": self.error}
     
 
@@ -34,6 +35,9 @@ class MessageHandler:
     def game_start(self,msg):
         self.gui.game_start()
 
+    def game_over(self, msg):
+        self.gui.game_over(msg)
+
     def game_place_invalid(self,msg):
         pass 
         # TODO
@@ -44,10 +48,15 @@ class MessageHandler:
         #TODO
         self.gui.game_do_hit()
 
+    def game_hit(self, msg):
+        x = msg["x"] 
+        y = msg["y"]
+        self.gui.game_hit(x, y)
+
     def game_hit_success(self,msg):
         x = msg["x"] 
         y = msg["y"]
-        self.gui.game_hit_success()
+        self.gui.game_hit_success(x, y)
 
     def set_score(self,msg):
         score = msg["score"]
