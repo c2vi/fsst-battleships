@@ -69,6 +69,7 @@ class Matchmaking(QWidget):
         self.layout_mtchmkng.addWidget(self.widget_lne_nme, 0, 1)
         self.layout_mtchmkng.addWidget(self.button, 0, 2)
         self.layout_mtchmkng.addWidget(self.scroll_area, 1, 1)
+        #self.layout_mtchmkng.setSpacing(5)
 
         self.setLayout(self.layout_mtchmkng)
         self.player_list()

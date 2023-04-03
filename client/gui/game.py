@@ -18,11 +18,24 @@ class Game(QWidget):
         self.main.state = "game"
 
         self.button_game = QPushButton("GAME")
+        self.button_game.setFixedSize(100, 25)
         self.button_game.setEnabled(False)
         self.button_scoreboard = QPushButton("SCOREBOARD")
+        self.button_scoreboard.setFixedSize(100, 25)
         self.button_scoreboard.clicked.connect(self.button_scoreboard_clicked)
         self.button_playerlist = QPushButton("PLAYERLIST")
+        self.button_playerlist.setFixedSize(100, 25)
         self.button_playerlist.clicked.connect(self.button_playerlist_clicked)
+
+        enemy_field_label = QLabel("ENEMY FIELD")
+        font = enemy_field_label.font()
+        font.setPointSize(40)
+        enemy_field_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        own_field_label = QLabel("OWN FIELD")
+        font = own_field_label.font()
+        font.setPointSize(40)
+        own_field_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         enemy_field_layout = QGridLayout()
 
@@ -53,11 +66,14 @@ class Game(QWidget):
         own_field_widget.setLayout(own_field_layout)
 
         game_layout = QGridLayout()
-        game_layout.addWidget(enemy_field_widget, 0, 1)
-        game_layout.addWidget(own_field_widget, 0, 0)
-        game_layout.addWidget(self.button_game, 1, 2)
-        game_layout.addWidget(self.button_scoreboard, 1, 3)
-        game_layout.addWidget(self.button_playerlist, 1, 4)
+        game_layout.addWidget(own_field_label, 0, 0)
+        game_layout.addWidget(enemy_field_label, 0, 1)
+        game_layout.addWidget(own_field_widget, 1, 0)
+        game_layout.addWidget(enemy_field_widget, 1, 1)
+        game_layout.addWidget(self.button_game, 2, 2)
+        game_layout.addWidget(self.button_scoreboard, 2, 3)
+        game_layout.addWidget(self.button_playerlist, 2, 4)
+        game_layout.setVerticalSpacing(0)
 
         self.setLayout(game_layout)
 

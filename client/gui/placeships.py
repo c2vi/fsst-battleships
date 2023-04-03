@@ -20,12 +20,16 @@ class PlaceShips(QWidget):
         self.main.state = "place-ships"
 
         self.button_game = QPushButton("GAME")
+        self.button_game.setFixedSize(100, 25)
         self.button_game.setEnabled(False)
         self.button_scoreboard = QPushButton("SCOREBOARD")
+        self.button_scoreboard.setFixedSize(100, 25)
         self.button_scoreboard.setEnabled(False)
         self.button_playerlist = QPushButton("PLAYERLIST")
+        self.button_playerlist.setFixedSize(100, 25)
         self.button_playerlist.setEnabled(False)
         self.button_done = QPushButton("DONE")
+        self.button_done.setFixedSize(100, 25)
         self.button_done.clicked.connect(self.button_done_clicked)
 
 
@@ -103,11 +107,12 @@ class PlaceShips(QWidget):
 
         game_layout = QGridLayout()
         game_layout.addWidget(own_field_widget, 0, 0)
-        game_layout.addWidget(self.button_game, 1, 1)
-        game_layout.addWidget(self.button_scoreboard, 1, 2)
-        game_layout.addWidget(self.button_playerlist, 1, 3)
+        game_layout.addWidget(self.button_game, 1, 2)
+        game_layout.addWidget(self.button_scoreboard, 1, 3)
+        game_layout.addWidget(self.button_playerlist, 1, 4)
         game_layout.addWidget(self.button_done, 1, 0)
         game_layout.addWidget(self.ships, 0, 1)
+        game_layout.setSpacing(3)
 
         self.setLayout(game_layout)
 
